@@ -1,0 +1,7 @@
+"0","ggplot("
+"0","  data = penguins,"
+"0","  mapping = aes(x = flipper_length_mm, y = body_mass_g)"
+"0",") +"
+"0","  geom_point(aes(color = bill_depth_mm)) +"
+"0","  scale_colour_binned(type = ""viridis"") + "
+"0","  geom_smooth()"

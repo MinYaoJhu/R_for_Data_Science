@@ -1,0 +1,2 @@
+"0","ggplot(penguins, aes(y = fct_infreq(species))) +"
+"0","  geom_bar()"

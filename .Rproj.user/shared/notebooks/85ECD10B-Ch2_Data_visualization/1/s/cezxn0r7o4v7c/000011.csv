@@ -1,0 +1,7 @@
+"0","#| fig-alt: >"
+"0","#|   A bar chart of frequencies of species of penguins: Adelie "
+"0","#|   (approximately 150), Chinstrap (approximately 90), Gentoo "
+"0","#|   (approximately 125)."
+"0",""
+"0","ggplot(penguins, aes(x = species)) +"
+"0","  geom_bar()"

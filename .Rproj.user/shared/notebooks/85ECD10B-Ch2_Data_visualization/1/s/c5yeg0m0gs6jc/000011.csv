@@ -1,0 +1,8 @@
+"0","#| warning: false"
+"0","#| fig-alt: >"
+"0","#|   A density plot of body masses of penguins by species of penguins. Each "
+"0","#|   species (Adelie, Chinstrap, and Gentoo) is represented with different "
+"0","#|   colored outlines for the density curves."
+"0",""
+"0","ggplot(penguins, aes(x = body_mass_g, color = species)) +"
+"0","  geom_density(linewidth = 0.75)"

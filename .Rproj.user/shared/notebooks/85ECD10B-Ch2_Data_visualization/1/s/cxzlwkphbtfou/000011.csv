@@ -1,0 +1,8 @@
+"0","#| warning: false"
+"0","#| fig-alt: >"
+"0","#|   A scatterplot of body mass vs. flipper length of penguins. The plot "
+"0","#|   displays a positive, linear, relatively strong relationship between "
+"0","#|   these two variables."
+"0",""
+"0","ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g)) +"
+"0","  geom_point()"

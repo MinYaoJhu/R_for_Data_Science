@@ -1,0 +1,7 @@
+"0","+ geom_point(mapping = aes(x = displ, y = hwy))"
+"1","[1m[33mError[39m in `+.gg`:[22m
+[38;5;250m[33m![38;5;250m Cannot use `+` with a single argument
+[36mℹ[38;5;250m Did you accidentally put `+` on a new line?[39m
+Backtrace:
+[90m 1. [39m[1m[94mggplot2:::`+.gg`([39m[22mgeom_point(mapping = aes(x = displ, y = hwy))[1m[94m)[39m[22m
+"

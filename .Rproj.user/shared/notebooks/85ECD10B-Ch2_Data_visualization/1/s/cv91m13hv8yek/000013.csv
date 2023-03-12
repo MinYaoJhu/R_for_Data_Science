@@ -1,0 +1,4 @@
+"0","#| fig-alt: >"
+"0","#|   A blank, gray plot area."
+"0",""
+"0","ggplot(data = penguins)"

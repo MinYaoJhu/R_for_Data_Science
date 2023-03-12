@@ -1,0 +1,4 @@
+"0","ggplot(data = penguins) + "
+"0","  geom_point()"
+"2","Error in ggplot(data = penguins) : object 'penguins' not found
+"

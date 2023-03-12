@@ -1,0 +1,8 @@
+"0","#| fig-alt: >"
+"0","#|   A bar chart of frequencies of species of penguins, where the bars are "
+"0","#|   ordered in decreasing order of their heights (frequencies): Adelie "
+"0","#|   (approximately 150), Gentoo (approximately 125), Chinstrap "
+"0","#|   (approximately 90)."
+"0",""
+"0","ggplot(penguins, aes(x = fct_infreq(species))) +"
+"0","  geom_bar()"

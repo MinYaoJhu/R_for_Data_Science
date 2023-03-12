@@ -1,0 +1,2 @@
+"0","ggplot(penguins, aes(x = body_mass_g)) +"
+"0","  geom_histogram(binwidth = 2000)"

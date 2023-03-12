@@ -1,0 +1,6 @@
+"0","    #| eval: false"
+"0","    #| ggplot(data = penguins) + "
+"0","    #|    geom_point()"
+"0",""
+"0","    ggplot(data = penguins, mapping = aes(x = bill_length_mm, y = bill_depth_mm)) + "
+"0","      geom_point()"

@@ -1,0 +1,2 @@
+"0","ggplot(diamonds, aes(x = carat, color = cut, fill = cut)) +"
+"0","  geom_density(alpha = 0.5)"

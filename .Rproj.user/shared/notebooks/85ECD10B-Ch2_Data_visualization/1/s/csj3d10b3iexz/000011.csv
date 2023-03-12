@@ -1,0 +1,6 @@
+"0","    ggplot("
+"0","      data = penguins,"
+"0","      mapping = aes(x = flipper_length_mm, y = body_mass_g, color = bill_depth_mm)"
+"0","    ) +"
+"0","      geom_point() +"
+"0","      geom_smooth()"

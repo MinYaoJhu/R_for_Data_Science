@@ -1,0 +1,3 @@
+"0","ggplot(mpg, aes(x = hwy, y = displ)) +"
+"0","  geom_point() +"
+"0","  geom_smooth(aes(linewidth = drv))"

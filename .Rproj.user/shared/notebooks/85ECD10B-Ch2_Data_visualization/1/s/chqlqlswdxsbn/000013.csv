@@ -1,0 +1,7 @@
+"0","#| warning: false"
+"0","#| fig-alt: >"
+"0","#|   A histogram of body masses of penguins. The distribution is unimodal "
+"0","#|   and right skewed, ranging between approximately 2500 to 6500 grams."
+"0",""
+"0","ggplot(penguins, aes(x = body_mass_g)) +"
+"0","  geom_histogram(binwidth = 200)"

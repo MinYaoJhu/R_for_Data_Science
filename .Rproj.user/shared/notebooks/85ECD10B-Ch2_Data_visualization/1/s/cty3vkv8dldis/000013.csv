@@ -1,0 +1,6 @@
+"0","#| fig-alt: >"
+"0","#|   A density plot of body masses of penguins. The distribution is unimodal "
+"0","#|   and right skewed, ranging between approximately 2500 to 6500 grams."
+"0",""
+"0","ggplot(penguins, aes(x = body_mass_g)) +"
+"0","  geom_density()"

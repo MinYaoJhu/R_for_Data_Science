@@ -1,0 +1,7 @@
+"0","#| fig-alt: >"
+"0","#|   Bar plots of penguin species by island (Biscoe, Dream, and Torgersen)"
+"0","#|   the bars are scaled to the same height, making it a relative frequencies "
+"0","#|   plot"
+"0",""
+"0","ggplot(penguins, aes(x = island, fill = species)) +"
+"0","  geom_bar(position = ""fill"")"

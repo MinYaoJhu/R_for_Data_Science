@@ -1,0 +1,3 @@
+"0","ggplot(mpg, aes(x = hwy, y = displ)) +"
+"0","  geom_point(aes(linewidth = drv))"
+"2","Warning: [38;5;250mIgnoring unknown aesthetics: [32mlinewidth[38;5;250m[39m"

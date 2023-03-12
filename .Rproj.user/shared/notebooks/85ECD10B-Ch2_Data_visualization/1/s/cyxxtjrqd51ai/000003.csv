@@ -1,0 +1,4 @@
+"0","    #| fig-show: hide"
+"0",""
+"0","    ggplot(penguins, aes(x = island, fill = species)) +"
+"0","      geom_bar(position = ""fill"")"

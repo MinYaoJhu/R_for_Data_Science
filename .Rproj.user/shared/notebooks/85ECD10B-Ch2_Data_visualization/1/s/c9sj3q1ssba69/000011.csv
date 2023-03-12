@@ -1,0 +1,4 @@
+"0","#| fig-alt: >"
+"0","#|   Bar plots of penguin species by island (Biscoe, Dream, and Torgersen)"
+"0","ggplot(penguins, aes(x = island, fill = species)) +"
+"0","  geom_bar()"
