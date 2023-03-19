@@ -1,0 +1,6 @@
+"0","    #| eval: false"
+"0",""
+"0","    my_bar_plot <- ggplot(mpg, aes(x = class)) +"
+"0","      geom_bar()"
+"0","    "
+"0","    my_bar_plot"

@@ -1,0 +1,11 @@
+"0","    #| error: true"
+"0",""
+"0","    my_variable <- 10"
+"0","    my_variable"
+"1","[1]"
+"1"," 10"
+"1","
+"
+"0","    my_varıable"
+"2","Error: object 'my_varıable' not found
+"

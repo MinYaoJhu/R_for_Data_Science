@@ -1,0 +1,6 @@
+"0","#| echo: false"
+"0","#| fig-alt: >"
+"0","#|   Environment tab of RStudio which shows r_rocks, this_is_a_really_long_name, "
+"0","#|   x, and y in the Global Environment."
+"0",""
+"0","knitr::include_graphics(""screenshots/rstudio-env.png"")"
