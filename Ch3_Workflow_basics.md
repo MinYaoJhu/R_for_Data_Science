@@ -313,7 +313,7 @@ library(tidyverse)
 ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ## ✔ dplyr     1.1.0     ✔ readr     2.1.4
 ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
-## ✔ ggplot2   3.4.1     ✔ tibble    3.2.0
+## ✔ ggplot2   3.4.1     ✔ tibble    3.2.1
 ## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
 ## ✔ purrr     1.0.1     
 ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
@@ -358,9 +358,9 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
     What happens?
     How can you get to the same place using the menus?
     
-> it knits the file.
+> it shows the keyboard shortcut reference.
     
-> yes, use "Knit".
+> yes, you can find it in Tools/keyboard shortcuts help.
 
 
 4.  Let's revisit an exercise from the @sec-ggsave.

@@ -255,9 +255,9 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
     What happens?
     How can you get to the same place using the menus?
     
-> it knits the file.
+> it shows the keyboard shortcut reference.
     
-> yes, use "Knit".
+> yes, you can find it in Tools/keyboard shortcuts help.
 
 
 4.  Let's revisit an exercise from the @sec-ggsave.
