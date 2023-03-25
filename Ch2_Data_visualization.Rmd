@@ -1030,6 +1030,7 @@ You will learn about many other geoms for visualizing distributions of variables
     (Hint: Type `?mpg` to read the documentation for the dataset.) How can you see this information when you run `mpg`?
     
 ```{r}
+mpg
 str(mpg)
 summary(mpg)
 ```
@@ -1154,8 +1155,7 @@ ggplot(
         color = species, shape = species
       )
     ) +
-      geom_point() +
-      labs(color = "species")
+      geom_point() 
 ```
 
 
