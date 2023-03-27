@@ -379,7 +379,7 @@ flights |>
   select(tail_num = tailnum)
 ```
 
-### `rename()`
+### 4.3.3 `rename()`
 
 If you want to keep all the existing variables and just want to rename a few, you can use `rename()` instead of `select()`:
 
@@ -390,7 +390,7 @@ flights |>
 
 If you have a bunch of inconsistently named columns and it would be painful to fix them all by hand, check out `janitor::clean_names()` which provides some useful automated cleaning.
 
-### `relocate()`
+### 4.3.4 `relocate()`
 
 Use `relocate()` to move variables around.
 You might want to collect related variables together or move important variables to the front.
@@ -412,7 +412,7 @@ flights |>
   relocate(starts_with("arr"), .before = dep_time)
 ```
 
-### Exercises
+### 4.3.5 Exercises
 
 ```{r}
 #| eval: false
@@ -467,7 +467,7 @@ ggplot(flights, aes(x = air_time - airtime2)) + geom_histogram()
       arrange(arr_delay)
     ```
 
-## The pipe {#sec-the-pipe}
+## 4.4 The pipe {#sec-the-pipe}
 
 We've shown you simple examples of the pipe above, but its real power arises when you start to combine multiple verbs.
 For example, imagine that you wanted to find the fast flights to Houston's IAH airport: you need to combine `filter()`, `mutate()`, `select()`, and `arrange()`:
@@ -554,7 +554,7 @@ Secondly, `|>` is quite a bit simpler than `%>%`: in the time between the invent
 This allowed the base implementation to jettison infrequently used and less important features.
 :::
 
-## Groups
+## 4.5 Groups
 
 So far you've learned about functions that work with rows and columns.
 dplyr gets even more powerful when you add in the ability to work with groups.
