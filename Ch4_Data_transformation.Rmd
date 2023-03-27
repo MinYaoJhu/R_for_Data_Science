@@ -38,7 +38,7 @@ If you want to use the base version of these functions after loading dplyr, you'
 So far we've mostly ignored which package a function comes from because most of the time it doesn't matter.
 However, knowing the package can help you find help and find related functions, so when we need to be precise about which function a package comes from, we'll use the same syntax as R: `packagename::functionname()`.
 
-### nycflights13
+### 4.1.2 nycflights13
 
 To explore the basic dplyr verbs, we're going to use `nycflights13::flights`.
 This dataset contains all `r format(nrow(nycflights13::flights), big.mark = ",")` flights that departed from New York City in 2013.
@@ -61,7 +61,7 @@ glimpse(flights)
 In both views, the variables names are followed by abbreviations that tell you the type of each variable: `<int>` is short for integer, `<dbl>` is short for double (aka real numbers), `<chr>` for character (aka strings), and `<dttm>` for date-time.
 These are important because the operations you can perform on a column depend so much on its "type", and these types are used to organize the chapters in the next section of the book.
 
-### dplyr basics
+### 4.1.3 dplyr basics
 
 You're about to learn the primary dplyr verbs (functions) which will allow you to solve the vast majority of your data manipulation challenges.
 But before we discuss their individual differences, it's worth stating what they have in common:
@@ -92,13 +92,13 @@ dplyr's verbs are organized into four groups based on what they operate on: **ro
 In the following sections you'll learn the most important verbs for rows, columns, and groups, then we'll come back to the join verbs that work on tables in @sec-joins.
 Let's dive in!
 
-## Rows
+## 4.2 Rows
 
 The most important verbs that operate on rows of a dataset are `filter()`, which changes which rows are present without changing their order, and `arrange()`, which changes the order of the rows without changing which are present.
 Both functions only affect the rows, and the columns are left unchanged.
 We'll also discuss `distinct()` which finds rows with unique values but unlike `arrange()` and `filter()` it can also optionally modify the columns.
 
-### `filter()`
+### 4.2.1 `filter()`
 
 `filter()` allows you to keep rows based on the values of the columns[^data-transform-1].
 The first argument is the data frame.
@@ -145,7 +145,7 @@ jan1 <- flights |>
   filter(month == 1 & day == 1)
 ```
 
-### Common mistakes
+### 4.2.2 Common mistakes
 
 When you're starting out with R, the easiest mistake to make is to use `=` instead of `==` when testing for equality.
 `filter()` will let you know when this happens:
@@ -169,7 +169,7 @@ flights |>
 This "works", in the sense that it doesn't throw an error, but it doesn't do what you want because `|` first checks the condition `month == 1` and then checks the condition `2`, which is not a sensible condition to check.
 We'll learn more about what's happening here and why in @sec-boolean-operations.
 
-### `arrange()`
+### 4.2.3 `arrange()`
 
 `arrange()` changes the order of the rows based on the value of the columns.
 It takes a data frame and a set of column names (or more complicated expressions) to order by.
@@ -192,7 +192,7 @@ flights |>
 
 Note that the number of rows has not changed -- we're only arranging the data, we're not filtering it.
 
-### `distinct()`
+### 4.2.4 `distinct()`
 
 `distinct()` finds all the unique rows in a dataset, so in a technical sense, it primarily operates on the rows.
 Most of the time, however, you'll want the distinct combination of some variables, so you can also optionally supply column names:
@@ -224,7 +224,7 @@ flights |>
   count(origin, dest, sort = TRUE)
 ```
 
-### Exercises
+### 4.2.5 Exercises
 
 1.  In a singe pipeline, find all flights that meet all of the following conditions:
 
@@ -250,11 +250,11 @@ flights |>
     Why/why not?
     Think about the results and how much work the functions would have to do.
 
-## Columns
+## 4.3 Columns
 
 There are four important verbs that affect the columns without changing the rows: `mutate()` creates new columns that are derived from the existing columns, `select()` changes which columns are present; `rename()` changes the names of the columns; and `relocate()` changes the positions of the columns.
 
-### `mutate()` {#sec-mutate}
+### 4.3.1 `mutate()` {#sec-mutate}
 
 The job of `mutate()` is to add new columns that are calculated from the existing columns.
 In the transform chapters, you'll learn a large set of functions that you can use to manipulate different types of variables.
@@ -317,7 +317,7 @@ Note that since we haven't assigned the result of the above computation back to 
 And if we want them to be available in a data frame for future use, we should think carefully about whether we want the result to be assigned back to `flights`, overwriting the original data frame with many more variables, or to a new object.
 Often, the right answer is a new object that is named informatively to indicate its contents, e.g., `delay_gain`, but you might also have good reasons for overwriting `flights`.
 
-### `select()` {#sec-select}
+### 4.3.2 `select()` {#sec-select}
 
 It's not uncommon to get datasets with hundreds or even thousands of variables.
 In this situation, the first challenge is often just focusing on the variables you're interested in.
