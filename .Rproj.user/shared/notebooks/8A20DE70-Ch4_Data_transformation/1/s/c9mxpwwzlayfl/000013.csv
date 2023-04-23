@@ -1,0 +1,7 @@
+"0","flights_sched_dep_time <- flights |>"
+"0","  select(sched_dep_time, dep_delay)"
+"0",""
+"0","flights_sched_dep_time |> "
+"0","  ggplot(aes(x = sched_dep_time, y = dep_delay)) +"
+"0","  geom_smooth(na.rm = TRUE) +"
+"0","  geom_point(na.rm = TRUE)"

@@ -1,0 +1,8 @@
+"0","new_flights <- flights |> "
+"0","  mutate("
+"0","    gain1 = dep_delay - arr_delay,"
+"0","    hours = air_time / 60,"
+"0","    gain2 = gain1 / hours,"
+"0","    .before = dep_time)"
+"0",""
+"0","new_flights"

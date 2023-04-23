@@ -1,0 +1,6 @@
+"0","flights |> "
+"0","  group_by(carrier) |> "
+"0","  summarize("
+"0","    delay = mean(dep_delay, na.rm = TRUE),"
+"0","    n = n()) |> "
+"0","  arrange(desc(delay))"

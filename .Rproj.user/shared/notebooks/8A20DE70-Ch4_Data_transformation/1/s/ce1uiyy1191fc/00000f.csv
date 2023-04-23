@@ -1,0 +1,6 @@
+"0","daily |> "
+"0","  ungroup() |>"
+"0","  summarize("
+"0","    avg_delay = mean(dep_delay, na.rm = TRUE), "
+"0","    flights = n()"
+"0","  )"

@@ -1,0 +1,3 @@
+"0","# A shorter way to select flights that departed in January or February"
+"0","flights |> "
+"0","  filter(month %in% c(1, 2))"

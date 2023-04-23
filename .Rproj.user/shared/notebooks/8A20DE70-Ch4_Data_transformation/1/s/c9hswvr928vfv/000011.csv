@@ -1,0 +1,1 @@
+"0","ggplot(flights, aes(x = dep_sched %% 60)) + geom_histogram(binwidth = 1)"

@@ -1,0 +1,7 @@
+"0","flights_Q1 <- flights |>"
+"0","  select(dep_time,sched_dep_time,dep_delay) |> "
+"0","  mutate("
+"0","    dep_delay2 = dep_time - sched_dep_time"
+"0","  )"
+"0",""
+"0","flights_Q1"

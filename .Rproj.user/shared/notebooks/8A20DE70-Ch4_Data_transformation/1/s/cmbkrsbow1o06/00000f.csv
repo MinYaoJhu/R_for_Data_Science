@@ -1,0 +1,3 @@
+"0","df |>"
+"0","  group_by(y, z) |>"
+"0","  mutate(mean_x = mean(x))"

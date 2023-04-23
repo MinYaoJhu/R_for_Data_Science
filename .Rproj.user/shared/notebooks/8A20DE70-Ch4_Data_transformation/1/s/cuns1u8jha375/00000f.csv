@@ -1,0 +1,3 @@
+"0","# Flights that departed on January 1"
+"0","flights |> "
+"0","  filter(month == 1 & day == 1)"

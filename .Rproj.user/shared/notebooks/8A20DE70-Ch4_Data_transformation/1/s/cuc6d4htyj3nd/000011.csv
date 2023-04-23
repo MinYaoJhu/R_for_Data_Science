@@ -1,0 +1,4 @@
+"0","    #| results: false"
+"0",""
+"0","    flights |> "
+"0","      select(!year:day)"
