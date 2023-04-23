@@ -229,26 +229,205 @@ flights |>
 1.  In a singe pipeline, find all flights that meet all of the following conditions:
 
     -   Had an arrival delay of two or more hours
+```{r}
+flights |> 
+  filter(arr_delay >= 120)
+```
+
     -   Flew to Houston (`IAH` or `HOU`)
+```{r}
+flights |> 
+  filter(arr_delay >= 120) |> 
+  filter(dest %in% c("IAH","HOU"))
+```
+
     -   Were operated by United, American, or Delta
+```{r}
+flights |> 
+  filter(arr_delay >= 120) |> 
+  filter(dest %in% c("IAH","HOU")) |> 
+  filter(carrier %in% c("UA","AA","DL"))
+```
+
     -   Departed in summer (July, August, and September)
+```{r}
+flights |> 
+  filter(arr_delay >= 120) |> 
+  filter(dest %in% c("IAH","HOU")) |> 
+  filter(carrier %in% c("UA","AA","DL")) |> 
+  filter(month %in% c(7,8,9))
+```
+
     -   Arrived more than two hours late, but didn't leave late
+```{r}
+flights |> 
+  filter(arr_delay >= 120) |> 
+  filter(dest %in% c("IAH","HOU")) |> 
+  filter(carrier %in% c("UA","AA","DL")) |> 
+  filter(month %in% c(7,8,9)) |> 
+  filter(dep_delay <= 0)
+```
+
+> Arrived more than two hours late, but didn't leave more than two hours late
+
+```{r}
+flights |> 
+  filter(arr_delay >= 120) |> 
+  filter(dest %in% c("IAH","HOU")) |> 
+  filter(carrier %in% c("UA","AA","DL")) |> 
+  filter(month %in% c(7,8,9)) |> 
+  filter(dep_delay <= 120)
+```
+
     -   Were delayed by at least an hour, but made up over 30 minutes in flight
+
+```{r}
+flights |> 
+  filter(arr_delay >= 120) |> 
+  filter(dest %in% c("IAH","HOU")) |> 
+  filter(carrier %in% c("UA","AA","DL")) |> 
+  filter(month %in% c(7,8,9)) |> 
+  filter(dep_delay <= 120) |> 
+  filter(dep_delay >= 60) |> 
+  mutate(gain = dep_delay - arr_delay) |> 
+  filter(gain >= 30)
+  
+```
+
+> arr_delay also at least an hour
+
+```{r}
+flights |> 
+  filter(arr_delay >= 60) |> 
+  filter(dest %in% c("IAH","HOU")) |> 
+  filter(carrier %in% c("UA","AA","DL")) |> 
+  filter(month %in% c(7,8,9)) |> 
+  filter(dep_delay <= 120) |> 
+  filter(dep_delay >= 60) |> 
+  mutate(gain = dep_delay - arr_delay) |> 
+  filter(gain >= 30)
+```
+
+
+```{r}
+airlines
+```
+
 
 2.  Sort `flights` to find the flights with longest departure delays.
     Find the flights that left earliest in the morning.
 
+> the flights with longest departure delays.
+
+```{r}
+flights |> 
+  arrange(desc(dep_delay))
+```
+
+> the flights that left earliest in the morning.
+
+```{r}
+summary(flights)
+```
+
+
+```{r}
+# earliest dep_time
+flights |> 
+  arrange(dep_time)
+
+# earliest sched_dep_time
+flights |> 
+  arrange(sched_dep_time)
+```
+
+
 3.  Sort `flights` to find the fastest flights.
     (Hint: Try including a math calculation inside of your function.)
+    
+```{r}
+flights |> 
+  mutate(speed = distance / air_time) |> 
+  arrange(desc(speed))
+```
+
 
 4.  Was there a flight on every day of 2013?
+
+> Yes
+
+```{r}
+flights |> 
+  count(month,day)
+
+flights |> 
+  distinct(month,day)
+```
+
 
 5.  Which flights traveled the farthest distance?
     Which traveled the least distance?
 
+> the farthest distance: John F Kennedy Intl to Honolulu Intl
+
+```{r}
+flights |> 
+  arrange(desc(distance))
+```
+
+
+> the least distance: Newark Liberty Intl to La Guardia
+    
+```{r}
+flights |> 
+  arrange(distance)
+```
+
+```{r}
+airports |> 
+  filter(faa  %in%  c("EWR","LGA","JFK","HNL"))
+```
+
+
 6.  Does it matter what order you used `filter()` and `arrange()` if you're using both?
     Why/why not?
     Think about the results and how much work the functions would have to do.
+    
+> It depends on what criteria you use for `filter()` and `arrange()`. The order you use `filter()` and `arrange()` might influence the speed. 
+
+```{r}
+system.time(
+  flights |>
+    arrange(sched_dep_time, dep_time, dep_delay, sched_arr_time, arr_time, arr_delay) |>
+    filter(arr_delay >= 120) |>
+    filter(dest %in% c("IAH", "HOU")) |>
+    filter(carrier %in% c("UA", "AA", "DL")) |>
+    filter(month %in% c(7, 8, 9))
+)
+```
+
+```{r}
+system.time(
+  flights |>
+    filter(arr_delay >= 120) |>
+    filter(dest %in% c("IAH", "HOU")) |>
+    filter(carrier %in% c("UA", "AA", "DL")) |>
+    filter(month %in% c(7, 8, 9)) |> 
+    arrange(sched_dep_time, dep_time, dep_delay, sched_arr_time, arr_time, arr_delay)
+)
+```
+
+> The ‘user time’ is the CPU time charged for the execution of user instructions of the calling process. 
+
+> The ‘system time’ is the CPU time charged for execution by the system on behalf of the calling process.
+
+> Elapsed Time is the time charged to the CPU(s) for the expression.
+
+> User Time is the wall clock time. The time that you as a user experienced.
+
+> If `elapsed time < user time`, this means that the CPU is waiting around for some other operations (may be external) to be done.
+
+> If `elapsed time > user time`, this means that your machine has multiple cores and is able to use them
 
 ## 4.3 Columns
 
@@ -364,9 +543,46 @@ In this situation, the first challenge is often just focusing on the variables y
 There are a number of helper functions you can use within `select()`:
 
 -   `starts_with("abc")`: matches names that begin with "abc".
+
+```{r}
+flights |> 
+  select(starts_with("dep"))
+```
+
+
 -   `ends_with("xyz")`: matches names that end with "xyz".
+
+```{r}
+flights |> 
+  select(ends_with("delay"))
+```
+
 -   `contains("ijk")`: matches names that contain "ijk".
+
+```{r}
+flights |> 
+  select(contains("arr"))
+```
+
+
 -   `num_range("x", 1:3)`: matches `x1`, `x2` and `x3`.
+
+```{r}
+new_flights <- flights |> 
+  mutate(
+    gain1 = dep_delay - arr_delay,
+    hours = air_time / 60,
+    gain2 = gain1 / hours,
+    .before = dep_time)
+
+new_flights
+```
+
+```{r}
+new_flights |> 
+  select(num_range("gain", 1:2))
+```
+
 
 See `?select` for more details.
 Once you know regular expressions (the topic of @sec-regular-expressions) you'll also be able to use `matches()` to select variables that match a pattern.
@@ -390,6 +606,11 @@ flights |>
 
 If you have a bunch of inconsistently named columns and it would be painful to fix them all by hand, check out `janitor::clean_names()` which provides some useful automated cleaning.
 
+```{r}
+janitor::clean_names(new_flights)
+```
+
+
 ### 4.3.4 `relocate()`
 
 Use `relocate()` to move variables around.
@@ -412,42 +633,132 @@ flights |>
   relocate(starts_with("arr"), .before = dep_time)
 ```
 
-### 4.3.5 Exercises
-
 ```{r}
 #| eval: false
 #| echo: false
 
 # For data checking, not used in results shown in book
-flights <- flights |> mutate(
-  dep_time = hour * 60 + minute,
-  arr_time = (arr_time %/% 100) * 60 + (arr_time %% 100),
-  airtime2 = arr_time - dep_time,
-  dep_sched = dep_time + dep_delay
-)
-
-ggplot(flights, aes(x = dep_sched)) + geom_histogram(binwidth = 60)
-ggplot(flights, aes(x = dep_sched %% 60)) + geom_histogram(binwidth = 1)
-ggplot(flights, aes(x = air_time - airtime2)) + geom_histogram()
+# flights <- flights |> mutate(
+#   dep_time = hour * 60 + minute,
+#   arr_time = (arr_time %/% 100) * 60 + (arr_time %% 100),
+#   airtime2 = arr_time - dep_time,
+#   dep_sched = dep_time + dep_delay
+# )
+# 
+# ggplot(flights, aes(x = dep_sched)) + geom_histogram(binwidth = 60)
+# ggplot(flights, aes(x = dep_sched %% 60)) + geom_histogram(binwidth = 1)
+# ggplot(flights, aes(x = air_time - airtime2)) + geom_histogram()
 ```
+
+### 4.3.5 Exercises
 
 1.  Compare `dep_time`, `sched_dep_time`, and `dep_delay`.
     How would you expect those three numbers to be related?
+    
+```{r}
+flights |>
+  select(dep_time,sched_dep_time,dep_delay)
+```
+
+    
+```{r}
+flights_Q1 <- flights |>
+  select(dep_time,sched_dep_time,dep_delay) |> 
+  mutate(
+    dep_delay2 = dep_time - sched_dep_time
+  )
+
+flights_Q1
+```
+
+> the units are different, so I need to convert it first.
+
+```{r}
+flights_Q1 <- flights |>
+  select(dep_time,sched_dep_time,dep_delay) |> 
+  mutate(
+    dep_time_min = (dep_time %/% 100) * 60 + (dep_time %% 100),
+    sched_dep_time_min = (sched_dep_time %/% 100) * 60 + (sched_dep_time %% 100),
+    dep_delay_min = dep_time_min - sched_dep_time_min
+  )
+
+flights_Q1
+```
 
 2.  Brainstorm as many ways as possible to select `dep_time`, `dep_delay`, `arr_time`, and `arr_delay` from `flights`.
 
+```{r}
+str(flights)
+```
+
+
+```{r}
+flights |> 
+  select(dep_time, dep_delay, arr_time, arr_delay)
+```
+
+```{r}
+flights |> 
+  select(starts_with("dep")|starts_with("arr"))
+```
+
+```{r}
+flights |> 
+  select(starts_with(c("dep","arr")))
+```
+
+```{r}
+flights |> 
+  select(ends_with(c("time","delay"))) |> 
+  select(!starts_with(c("sched","air")))
+```
+
+
 3.  What happens if you specify the name of the same variable multiple times in a `select()` call?
+
+```{r}
+flights |> 
+  select(dep_time, dep_time, dep_time, arr_delay)
+```
+
 
 4.  What does the `any_of()` function do?
     Why might it be helpful in conjunction with this vector?
 
-    ```{r}
-    variables <- c("year", "month", "day", "dep_delay", "arr_delay")
-    ```
+> any_of() doesn't check for missing variables. It is especially useful with negative selections, when you would like to make sure a variable is removed.
+
+```{r}
+variables <- c("year", "month", "day", "dep_delay", "arr_delay")
+
+str(flights)
+```
+
+```{r}
+flights |> 
+  select(any_of(variables))
+```
+
+```{r}
+select_flights <- flights |> 
+  select(!any_of(variables))
+select_flights
+```
+
+any_of() is especially useful to remove variables from a data frame because calling it again does not cause an error:
+
+```{r}
+select_flights |> 
+  select(!any_of(variables))
+```
+
 
 5.  Does the result of running the following code surprise you?
     How do the select helpers deal with upper and lower case by default?
     How can you change that default?
+    
+> Yes.
+
+> default: `contains(match, ignore.case = TRUE, vars = NULL)`
 
     ```{r}
     #| eval: false
@@ -455,17 +766,36 @@ ggplot(flights, aes(x = air_time - airtime2)) + geom_histogram()
     flights |> select(contains("TIME"))
     ```
 
+```{r}
+    flights |> select(contains("TIME", ignore.case = FALSE))
+```
+
+
 6.  Rename `air_time` to `air_time_min` to indicate units of measurement and move it to the beginning of the data frame.
+
+```{r}
+flights |> 
+  rename(air_time_min = air_time) |> 
+  relocate(air_time_min, .before = 1)
+```
+
 
 7.  Why doesn't the following work, and what does the error mean?
 
-    ```{r}
-    #| error: true
+```{r error = TRUE}
+flights |>
+  select(tailnum) |>
+  arrange(arr_delay)
+```
 
-    flights |> 
-      select(tailnum) |> 
-      arrange(arr_delay)
-    ```
+> it cannot find 'arr_delay'
+
+```{r}
+flights |> 
+  arrange(arr_delay) |> 
+  select(tailnum)
+```
+
 
 ## 4.4 The pipe {#sec-the-pipe}
 
@@ -660,6 +990,8 @@ To make it obvious what's happening, dplyr displays a message that tells you how
 ```{r}
 daily_flights <- daily |> 
   summarize(n = n())
+
+daily_flights
 ```
 
 If you're happy with this behavior, you can explicitly request it in order to suppress the message:
@@ -672,6 +1004,8 @@ daily_flights <- daily |>
     n = n(), 
     .groups = "drop_last"
   )
+
+daily_flights
 ```
 
 Alternatively, change the default behavior by setting a different value, e.g. `"drop"` to drop all grouping or `"keep"` to preserve the same groups.
@@ -739,91 +1073,220 @@ You can learn more about it in the [dplyr 1.1.0 blog post](https://www.tidyverse
     Why/why not?
     (Hint: think about `flights |> group_by(carrier, dest) |> summarize(n())`)
 
+```{r}
+flights |> 
+  group_by(carrier) |> 
+  summarize(
+    delay = mean(dep_delay, na.rm = TRUE),
+    n = n()) |> 
+  arrange(desc(delay))
+```
+
+```{r}
+airlines |> 
+  filter(carrier == "F9")
+```
+
+> F9 (Frontier Airlines Inc.) has the worst average delays.
+
+
+
+```{r}
+flights |> 
+  group_by(dest) |> 
+  summarize(
+    delay = mean(dep_delay, na.rm = TRUE),
+    n = n()) |> 
+    arrange(desc(delay))
+```
+
+> the effects of bad airports
+
+```{r}
+flights |> 
+  group_by(carrier, dest) |> 
+  summarize(
+    delay = mean(dep_delay, na.rm = TRUE),
+    n = n()) |> 
+    arrange(desc(delay))
+```
+
+
 2.  Find the flights that are most delayed upon departure from each destination.
+
+```{r}
+flights |>
+  group_by(dest) |>
+  slice_max(arr_delay, n = 1) |>
+  relocate(dest, dep_delay) |> 
+  arrange(desc(arr_delay))
+```
+
 
 3.  How do delays vary over the course of the day.
     Illustrate your answer with a plot.
+    
+```{r}
+flights |>
+  group_by(hour) |> 
+  summarize(
+    delay = mean(dep_delay, na.rm = TRUE),
+    n = n())
+```
+
+```{r}
+flights_hour <- flights |>
+  group_by(hour) |> 
+  select(hour, dep_delay)
+
+flights_hour$hour <- as.factor(flights_hour$hour)
+
+str(flights_hour)
+  
+
+flights_hour |> 
+  ggplot(aes(x = hour, y = dep_delay)) +
+  geom_boxplot(na.rm = TRUE) +
+  geom_point(na.rm = TRUE)
+```
+
+```{r}
+flights_sched_dep_time <- flights |>
+  select(sched_dep_time, dep_delay)
+
+flights_sched_dep_time |> 
+  ggplot(aes(x = sched_dep_time, y = dep_delay)) +
+  geom_smooth(na.rm = TRUE) +
+  geom_point(na.rm = TRUE)
+```
+
 
 4.  What happens if you supply a negative `n` to `slice_min()` and friends?
+
+```{r}
+flights |> 
+  slice_min(dep_delay, n = 1)
+```
+```{r}
+flights |> 
+  arrange(dep_delay)
+```
+
+
+```{r}
+flights |> 
+  slice_min(dep_delay, n = -1)
+```
+
+> arrange the result but didn't slice
 
 5.  Explain what `count()` does in terms of the dplyr verbs you just learned.
     What does the `sort` argument to `count()` do?
 
+> `count()` lets you quickly count the unique values of one or more variables: `df %>% count(a, b)` is roughly equivalent to `df %>% group_by(a, b) %>% summarise(n = n())`.
+
+> sort: If TRUE, will show the largest groups at the top.
+
+```{r}
+flights |> 
+  count(dest, sort = TRUE)
+```
+
+    
+
 6.  Suppose we have the following tiny data frame:
 
-    ```{r}
-    df <- tibble(
-      x = 1:5,
-      y = c("a", "b", "a", "a", "b"),
-      z = c("K", "K", "L", "L", "K")
-    )
-    ```
+```{r}
+df <- tibble(
+  x = 1:5,
+  y = c("a", "b", "a", "a", "b"),
+  z = c("K", "K", "L", "L", "K")
+)
+```
 
     a.  Write down what you think the output will look like, then check if you were correct, and describe what `group_by()` does.
+    
 
-        ```{r}
-        #| eval: false
-            
-        df |>
-          group_by(y)
-        ```
+```{r}
+df
+```
+
+```{r}
+df |>
+  group_by(y)
+```
+
+> group_by() takes an existing tbl and converts it into a grouped tbl where operations are performed "by group".  It is “grouped by” y `Groups:y [2]`.
 
     b.  Write down what you think the output will look like, then check if you were correct, and describe what `arrange()` does.
         Also comment on how it's different from the `group_by()` in part (a)?
 
-        ```{r}
-        #| eval: false
-            
-        df |>
-          arrange(y)
-        ```
+> arrange() changes the order of the rows based on the value of the columns.  Therefore, it ordered the rows based on the value of `y`.
+
+> `group_by()` in part (a) only “grouped the data by” y, but didn't arrange them.
+
+```{r}
+df |>
+  arrange(y)
+```
+
 
     c.  Write down what you think the output will look like, then check if you were correct, and describe what the pipeline does.
+    
+> Get the mean value of x for each group in y.
 
-        ```{r}
-        #| eval: false
-            
-        df |>
-          group_by(y) |>
-          summarize(mean_x = mean(x))
-        ```
+```{r}
+df |>
+  group_by(y) |>
+  summarize(mean_x = mean(x))
+```
+
 
     d.  Write down what you think the output will look like, then check if you were correct, and describe what the pipeline does.
         Then, comment on what the message says.
 
-        ```{r}
-        #| eval: false
-            
-        df |>
-          group_by(y, z) |>
-          summarize(mean_x = mean(x))
-        ```
+> Get the mean value of x for each combination group in y and z.
+
+```{r}
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x))
+```
+
 
     e.  Write down what you think the output will look like, then check if you were correct, and describe what the pipeline does.
         How is the output different from the one in part (d).
+        
+> the final output is not grouped. It doesn't have `Groups:y [2]`.
 
-        ```{r}
-        #| eval: false
-            
-        df |>
-          group_by(y, z) |>
-          summarize(mean_x = mean(x), .groups = "drop")
-        ```
+```{r}
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x), .groups = "drop")
+```
+
 
     f.  Write down what you think the outputs will look like, then check if you were correct, and describe what each pipeline does.
         How are the outputs of the two pipelines different?
 
-        ```{r}
-        #| eval: false
-            
-        df |>
-          group_by(y, z) |>
-          summarize(mean_x = mean(x))
-            
-        df |>
-          group_by(y, z) |>
-          mutate(mean_x = mean(x))
-        ```
+> the output is grouped by y `Groups:y [2]`
+
+```{r}
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x))
+```
+
+> the output is grouped by y & z `Groups:y, z [3]`. 
+
+> `mutate(mean_x = mean(x))` created a new column `mean_x`. Original x values and all rows are kept in the output.
+
+```{r}
+df |>
+  group_by(y, z) |>
+  mutate(mean_x = mean(x))
+```
+
 
 ## Case study: aggregates and sample size {#sec-sample-size}
 
