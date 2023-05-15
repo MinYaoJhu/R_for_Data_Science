@@ -252,15 +252,200 @@ RStudio provides a keyboard shortcut to create these headers (Cmd/Ctrl + Shift +
 
 1.  Restyle the following pipelines following the guidelines above.
 
-    
-    ```r
-    flights|>filter(dest=="IAH")|>group_by(year,month,day)|>summarize(n=n(),
-    delay=mean(arr_delay,na.rm=TRUE))|>filter(n>10)
-    
-    flights|>filter(carrier=="UA",dest%in%c("IAH","HOU"),sched_dep_time>
-    0900,sched_arr_time<2000)|>group_by(flight)|>summarize(delay=mean(
-    arr_delay,na.rm=TRUE),cancelled=sum(is.na(arr_delay)),n=n())|>filter(n>10)
-    ```
+
+```r
+# use style selection -----------------
+
+    flights |>
+      filter(dest == "IAH") |>
+      group_by(year, month, day) |>
+      summarize(
+        n = n(),
+        delay = mean(arr_delay, na.rm = TRUE)
+      ) |>
+      filter(n > 10)
+```
+
+```
+## `summarise()` has grouped output by 'year', 'month'. You can override using the
+## `.groups` argument.
+```
+
+```
+## # A tibble: 365 × 5
+## # Groups:   year, month [12]
+##     year month   day     n delay
+##    <int> <int> <int> <int> <dbl>
+##  1  2013     1     1    20 17.8 
+##  2  2013     1     2    20  7   
+##  3  2013     1     3    19 18.3 
+##  4  2013     1     4    20 -3.2 
+##  5  2013     1     5    13 20.2 
+##  6  2013     1     6    18  9.28
+##  7  2013     1     7    19 -7.74
+##  8  2013     1     8    19  7.79
+##  9  2013     1     9    19 18.1 
+## 10  2013     1    10    19  6.68
+## # ℹ 355 more rows
+```
+
+```r
+    flights |>
+      filter(carrier == "UA", dest %in% c("IAH", "HOU"), sched_dep_time >
+        0900, sched_arr_time < 2000) |>
+      group_by(flight) |>
+      summarize(delay = mean(
+        arr_delay,
+        na.rm = TRUE
+      ), cancelled = sum(is.na(arr_delay)), n = n()) |>
+      filter(n > 10)
+```
+
+```
+## # A tibble: 74 × 4
+##    flight delay cancelled     n
+##     <int> <dbl>     <int> <int>
+##  1     53 12.5          2    18
+##  2    112 14.1          0    14
+##  3    205 -1.71         0    14
+##  4    235 -5.36         0    14
+##  5    255 -9.47         0    15
+##  6    268 38.6          1    15
+##  7    292  6.57         0    21
+##  8    318 10.7          1    20
+##  9    337 20.1          2    21
+## 10    370 17.5          0    11
+## # ℹ 64 more rows
+```
+
+
+```r
+# use style selection & reformat code -----------------
+
+flights |>
+  filter(dest == "IAH") |>
+  group_by(year, month, day) |>
+  summarize(n = n(),
+            delay = mean(arr_delay, na.rm = TRUE)) |>
+  filter(n > 10)
+```
+
+```
+## `summarise()` has grouped output by 'year', 'month'. You can override using the
+## `.groups` argument.
+```
+
+```
+## # A tibble: 365 × 5
+## # Groups:   year, month [12]
+##     year month   day     n delay
+##    <int> <int> <int> <int> <dbl>
+##  1  2013     1     1    20 17.8 
+##  2  2013     1     2    20  7   
+##  3  2013     1     3    19 18.3 
+##  4  2013     1     4    20 -3.2 
+##  5  2013     1     5    13 20.2 
+##  6  2013     1     6    18  9.28
+##  7  2013     1     7    19 -7.74
+##  8  2013     1     8    19  7.79
+##  9  2013     1     9    19 18.1 
+## 10  2013     1    10    19  6.68
+## # ℹ 355 more rows
+```
+
+```r
+flights |>
+  filter(carrier == "UA",
+         dest %in% c("IAH", "HOU"),
+         sched_dep_time > 0900,
+         sched_arr_time < 2000) |>
+  group_by(flight) |>
+  summarize(
+    delay = mean(arr_delay,
+                 na.rm = TRUE),
+    cancelled = sum(is.na(arr_delay)),
+    n = n()
+  ) |>
+  filter(n > 10)
+```
+
+```
+## # A tibble: 74 × 4
+##    flight delay cancelled     n
+##     <int> <dbl>     <int> <int>
+##  1     53 12.5          2    18
+##  2    112 14.1          0    14
+##  3    205 -1.71         0    14
+##  4    235 -5.36         0    14
+##  5    255 -9.47         0    15
+##  6    268 38.6          1    15
+##  7    292  6.57         0    21
+##  8    318 10.7          1    20
+##  9    337 20.1          2    21
+## 10    370 17.5          0    11
+## # ℹ 64 more rows
+```
+
+
+```r
+flights |> filter(dest == "IAH") |> group_by(year, month, day) |> summarize(n =
+                                                                              n(),
+                                                                            delay = mean(arr_delay, na.rm = TRUE)) |> filter(n > 10)
+```
+
+```
+## `summarise()` has grouped output by 'year', 'month'. You can override using the
+## `.groups` argument.
+```
+
+```
+## # A tibble: 365 × 5
+## # Groups:   year, month [12]
+##     year month   day     n delay
+##    <int> <int> <int> <int> <dbl>
+##  1  2013     1     1    20 17.8 
+##  2  2013     1     2    20  7   
+##  3  2013     1     3    19 18.3 
+##  4  2013     1     4    20 -3.2 
+##  5  2013     1     5    13 20.2 
+##  6  2013     1     6    18  9.28
+##  7  2013     1     7    19 -7.74
+##  8  2013     1     8    19  7.79
+##  9  2013     1     9    19 18.1 
+## 10  2013     1    10    19  6.68
+## # ℹ 355 more rows
+```
+
+```r
+flights |> filter(carrier == "UA",
+                  dest %in% c("IAH", "HOU"),
+                  sched_dep_time >
+                    0900,
+                  sched_arr_time < 2000) |> group_by(flight) |> summarize(
+                    delay = mean(arr_delay, na.rm = TRUE),
+                    cancelled = sum(is.na(arr_delay)),
+                    n = n()
+                  ) |> filter(n > 10)
+```
+
+```
+## # A tibble: 74 × 4
+##    flight delay cancelled     n
+##     <int> <dbl>     <int> <int>
+##  1     53 12.5          2    18
+##  2    112 14.1          0    14
+##  3    205 -1.71         0    14
+##  4    235 -5.36         0    14
+##  5    255 -9.47         0    15
+##  6    268 38.6          1    15
+##  7    292  6.57         0    21
+##  8    318 10.7          1    20
+##  9    337 20.1          2    21
+## 10    370 17.5          0    11
+## # ℹ 64 more rows
+```
+
+
 
 ## Summary
 
