@@ -178,12 +178,307 @@ ggplot(table1, aes(x = year, y = cases)) +
 
 1.  For each of the sample tables, describe what each observation and each column represents.
 
+
+```r
+table1
+```
+
+```
+## # A tibble: 6 × 4
+##   country      year  cases population
+##   <chr>       <dbl>  <dbl>      <dbl>
+## 1 Afghanistan  1999    745   19987071
+## 2 Afghanistan  2000   2666   20595360
+## 3 Brazil       1999  37737  172006362
+## 4 Brazil       2000  80488  174504898
+## 5 China        1999 212258 1272915272
+## 6 China        2000 213766 1280428583
+```
+
+In table table1, each row represents a (country, year) combination. The columns cases and population contain the values for those variables.
+
+
+```r
+table2
+```
+
+```
+## # A tibble: 12 × 4
+##    country      year type            count
+##    <chr>       <dbl> <chr>           <dbl>
+##  1 Afghanistan  1999 cases             745
+##  2 Afghanistan  1999 population   19987071
+##  3 Afghanistan  2000 cases            2666
+##  4 Afghanistan  2000 population   20595360
+##  5 Brazil       1999 cases           37737
+##  6 Brazil       1999 population  172006362
+##  7 Brazil       2000 cases           80488
+##  8 Brazil       2000 population  174504898
+##  9 China        1999 cases          212258
+## 10 China        1999 population 1272915272
+## 11 China        2000 cases          213766
+## 12 China        2000 population 1280428583
+```
+
+In table2, each row represents a (country, year, variable) combination. The column count contains the values of variables cases and population in separate rows.
+
+
+```r
+table3
+```
+
+```
+## # A tibble: 6 × 4
+##   country     type           `1999`     `2000`
+##   <chr>       <chr>           <dbl>      <dbl>
+## 1 Afghanistan cases             745       2666
+## 2 Afghanistan population   19987071   20595360
+## 3 Brazil      cases           37737      80488
+## 4 Brazil      population  172006362  174504898
+## 5 China       cases          212258     213766
+## 6 China       population 1272915272 1280428583
+```
+
+In table3, each row represents a (country, type) combination. Each row represents a country & type, each column represents a year, and the cells are the value of the table’s variable for that country & type and year.
+
 2.  Sketch out the process you'd use to calculate the `rate` for `table2` and `table3`.
     You will need to perform four operations:
 
+
+```r
+table2
+```
+
+```
+## # A tibble: 12 × 4
+##    country      year type            count
+##    <chr>       <dbl> <chr>           <dbl>
+##  1 Afghanistan  1999 cases             745
+##  2 Afghanistan  1999 population   19987071
+##  3 Afghanistan  2000 cases            2666
+##  4 Afghanistan  2000 population   20595360
+##  5 Brazil       1999 cases           37737
+##  6 Brazil       1999 population  172006362
+##  7 Brazil       2000 cases           80488
+##  8 Brazil       2000 population  174504898
+##  9 China        1999 cases          212258
+## 10 China        1999 population 1272915272
+## 11 China        2000 cases          213766
+## 12 China        2000 population 1280428583
+```
+
     a.  Extract the number of TB cases per country per year.
+
+
+```r
+t2_cases <- filter(table2, type == "cases") |> 
+  rename(cases = count) |> 
+  arrange(country, year)
+t2_cases
+```
+
+```
+## # A tibble: 6 × 4
+##   country      year type   cases
+##   <chr>       <dbl> <chr>  <dbl>
+## 1 Afghanistan  1999 cases    745
+## 2 Afghanistan  2000 cases   2666
+## 3 Brazil       1999 cases  37737
+## 4 Brazil       2000 cases  80488
+## 5 China        1999 cases 212258
+## 6 China        2000 cases 213766
+```
+
+
     b.  Extract the matching population per country per year.
+    
+
+```r
+t2_population <- filter(table2, type == "population") |> 
+  rename(population = count) |> 
+  arrange(country, year)
+t2_population
+```
+
+```
+## # A tibble: 6 × 4
+##   country      year type       population
+##   <chr>       <dbl> <chr>           <dbl>
+## 1 Afghanistan  1999 population   19987071
+## 2 Afghanistan  2000 population   20595360
+## 3 Brazil       1999 population  172006362
+## 4 Brazil       2000 population  174504898
+## 5 China        1999 population 1272915272
+## 6 China        2000 population 1280428583
+```
+
+
     c.  Divide cases by population, and multiply by 10000.
+
+
+```r
+merge(t2_cases,t2_population,by=c("country","year")) |> 
+  select(-c(type.x,type.y))
+```
+
+```
+##       country year  cases population
+## 1 Afghanistan 1999    745   19987071
+## 2 Afghanistan 2000   2666   20595360
+## 3      Brazil 1999  37737  172006362
+## 4      Brazil 2000  80488  174504898
+## 5       China 1999 212258 1272915272
+## 6       China 2000 213766 1280428583
+```
+
+
+
+```r
+t2_cases_per_cap <- merge(t2_cases,t2_population,by=c("country","year")) |> 
+  select(-c(type.x,type.y)) |> 
+  mutate(cases_per_cap = (cases / population) * 10000) |> 
+  select(country, year, cases_per_cap)
+t2_cases_per_cap
+```
+
+```
+##       country year cases_per_cap
+## 1 Afghanistan 1999      0.372741
+## 2 Afghanistan 2000      1.294466
+## 3      Brazil 1999      2.193930
+## 4      Brazil 2000      4.612363
+## 5       China 1999      1.667495
+## 6       China 2000      1.669488
+```
+
+    
+    d.  Store back in the appropriate place.
+    
+
+```r
+t2_cases_per_cap <- t2_cases_per_cap |> 
+  mutate(type = "cases_per_cap") |> 
+  rename(count = cases_per_cap)
+t2_cases_per_cap
+```
+
+```
+##       country year    count          type
+## 1 Afghanistan 1999 0.372741 cases_per_cap
+## 2 Afghanistan 2000 1.294466 cases_per_cap
+## 3      Brazil 1999 2.193930 cases_per_cap
+## 4      Brazil 2000 4.612363 cases_per_cap
+## 5       China 1999 1.667495 cases_per_cap
+## 6       China 2000 1.669488 cases_per_cap
+```
+
+
+```r
+bind_rows(table2, t2_cases_per_cap) |> 
+  arrange(country, year, type, count)
+```
+
+```
+## # A tibble: 18 × 4
+##    country      year type            count
+##    <chr>       <dbl> <chr>           <dbl>
+##  1 Afghanistan  1999 cases         7.45e+2
+##  2 Afghanistan  1999 cases_per_cap 3.73e-1
+##  3 Afghanistan  1999 population    2.00e+7
+##  4 Afghanistan  2000 cases         2.67e+3
+##  5 Afghanistan  2000 cases_per_cap 1.29e+0
+##  6 Afghanistan  2000 population    2.06e+7
+##  7 Brazil       1999 cases         3.77e+4
+##  8 Brazil       1999 cases_per_cap 2.19e+0
+##  9 Brazil       1999 population    1.72e+8
+## 10 Brazil       2000 cases         8.05e+4
+## 11 Brazil       2000 cases_per_cap 4.61e+0
+## 12 Brazil       2000 population    1.75e+8
+## 13 China        1999 cases         2.12e+5
+## 14 China        1999 cases_per_cap 1.67e+0
+## 15 China        1999 population    1.27e+9
+## 16 China        2000 cases         2.14e+5
+## 17 China        2000 cases_per_cap 1.67e+0
+## 18 China        2000 population    1.28e+9
+```
+
+
+
+```r
+table3
+```
+
+```
+## # A tibble: 6 × 4
+##   country     type           `1999`     `2000`
+##   <chr>       <chr>           <dbl>      <dbl>
+## 1 Afghanistan cases             745       2666
+## 2 Afghanistan population   19987071   20595360
+## 3 Brazil      cases           37737      80488
+## 4 Brazil      population  172006362  174504898
+## 5 China       cases          212258     213766
+## 6 China       population 1272915272 1280428583
+```
+
+    a.  Extract the number of TB cases per country per year.
+    
+
+```r
+t3_cases <- filter(table3, type == "cases") |> 
+  arrange(country)
+t3_cases
+```
+
+```
+## # A tibble: 3 × 4
+##   country     type  `1999` `2000`
+##   <chr>       <chr>  <dbl>  <dbl>
+## 1 Afghanistan cases    745   2666
+## 2 Brazil      cases  37737  80488
+## 3 China       cases 212258 213766
+```
+
+    
+    b.  Extract the matching population per country per year.
+    
+
+```r
+t3_population <- filter(table3, type == "population") |> 
+  arrange(country)
+t3_population
+```
+
+```
+## # A tibble: 3 × 4
+##   country     type           `1999`     `2000`
+##   <chr>       <chr>           <dbl>      <dbl>
+## 1 Afghanistan population   19987071   20595360
+## 2 Brazil      population  172006362  174504898
+## 3 China       population 1272915272 1280428583
+```
+
+    c.  Divide cases by population, and multiply by 10000.
+    
+
+```r
+t3_cases_per_cap <-
+  tibble(
+    country = t3_cases$country,
+    `1999` = t3_cases[["1999"]] / t3_population[["1999"]] * 10000,
+    `2000` = t3_cases[["2000"]] / t3_population[["2000"]] * 10000
+  )
+t3_cases_per_cap
+```
+
+```
+## # A tibble: 3 × 3
+##   country     `1999` `2000`
+##   <chr>        <dbl>  <dbl>
+## 1 Afghanistan  0.373   1.29
+## 2 Brazil       2.19    4.61
+## 3 China        1.67    1.67
+```
+    
     d.  Store back in the appropriate place.
 
     You haven't yet learned all the functions you'd need to actually perform these operations, but you should still be able to think through the transformations you'd need.
@@ -219,25 +514,25 @@ billboard
 
 ```
 ## # A tibble: 317 × 79
-##    artist track date.ent…¹   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8   wk9
-##    <chr>  <chr> <date>     <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1 2 Pac  Baby… 2000-02-26    87    82    72    77    87    94    99    NA    NA
-##  2 2Ge+h… The … 2000-09-02    91    87    92    NA    NA    NA    NA    NA    NA
-##  3 3 Doo… Kryp… 2000-04-08    81    70    68    67    66    57    54    53    51
-##  4 3 Doo… Loser 2000-10-21    76    76    72    69    67    65    55    59    62
-##  5 504 B… Wobb… 2000-04-15    57    34    25    17    17    31    36    49    53
-##  6 98^0   Give… 2000-08-19    51    39    34    26    26    19     2     2     3
-##  7 A*Tee… Danc… 2000-07-08    97    97    96    95   100    NA    NA    NA    NA
-##  8 Aaliy… I Do… 2000-01-29    84    62    51    41    38    35    35    38    38
-##  9 Aaliy… Try … 2000-03-18    59    53    38    28    21    18    16    14    12
-## 10 Adams… Open… 2000-08-26    76    76    74    69    68    67    61    58    57
-## # … with 307 more rows, 67 more variables: wk10 <dbl>, wk11 <dbl>, wk12 <dbl>,
+##    artist     track date.entered   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8
+##    <chr>      <chr> <date>       <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1 2 Pac      Baby… 2000-02-26      87    82    72    77    87    94    99    NA
+##  2 2Ge+her    The … 2000-09-02      91    87    92    NA    NA    NA    NA    NA
+##  3 3 Doors D… Kryp… 2000-04-08      81    70    68    67    66    57    54    53
+##  4 3 Doors D… Loser 2000-10-21      76    76    72    69    67    65    55    59
+##  5 504 Boyz   Wobb… 2000-04-15      57    34    25    17    17    31    36    49
+##  6 98^0       Give… 2000-08-19      51    39    34    26    26    19     2     2
+##  7 A*Teens    Danc… 2000-07-08      97    97    96    95   100    NA    NA    NA
+##  8 Aaliyah    I Do… 2000-01-29      84    62    51    41    38    35    35    38
+##  9 Aaliyah    Try … 2000-03-18      59    53    38    28    21    18    16    14
+## 10 Adams, Yo… Open… 2000-08-26      76    76    74    69    68    67    61    58
+## # ℹ 307 more rows
+## # ℹ 68 more variables: wk9 <dbl>, wk10 <dbl>, wk11 <dbl>, wk12 <dbl>,
 ## #   wk13 <dbl>, wk14 <dbl>, wk15 <dbl>, wk16 <dbl>, wk17 <dbl>, wk18 <dbl>,
 ## #   wk19 <dbl>, wk20 <dbl>, wk21 <dbl>, wk22 <dbl>, wk23 <dbl>, wk24 <dbl>,
 ## #   wk25 <dbl>, wk26 <dbl>, wk27 <dbl>, wk28 <dbl>, wk29 <dbl>, wk30 <dbl>,
 ## #   wk31 <dbl>, wk32 <dbl>, wk33 <dbl>, wk34 <dbl>, wk35 <dbl>, wk36 <dbl>,
-## #   wk37 <dbl>, wk38 <dbl>, wk39 <dbl>, wk40 <dbl>, wk41 <dbl>, wk42 <dbl>,
-## #   wk43 <dbl>, wk44 <dbl>, wk45 <dbl>, wk46 <dbl>, wk47 <dbl>, wk48 <dbl>, …
+## #   wk37 <dbl>, wk38 <dbl>, wk39 <dbl>, wk40 <dbl>, wk41 <dbl>, wk42 <dbl>, …
 ```
 
 In this dataset, each observation is a song.
@@ -273,7 +568,7 @@ billboard |>
 ##  8 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk8      NA
 ##  9 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk9      NA
 ## 10 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk10     NA
-## # … with 24,082 more rows
+## # ℹ 24,082 more rows
 ```
 
 After the data, there are three key arguments:
@@ -317,7 +612,7 @@ billboard |>
 ##  8 2Ge+her The Hardest Part Of ... 2000-09-02   wk1      91
 ##  9 2Ge+her The Hardest Part Of ... 2000-09-02   wk2      87
 ## 10 2Ge+her The Hardest Part Of ... 2000-09-02   wk3      92
-## # … with 5,297 more rows
+## # ℹ 5,297 more rows
 ```
 
 The number of rows is now much lower, indicating that many rows with `NA`s were dropped.
@@ -357,7 +652,7 @@ billboard_longer
 ##  8 2Ge+her The Hardest Part Of ... 2000-09-02       1    91
 ##  9 2Ge+her The Hardest Part Of ... 2000-09-02       2    87
 ## 10 2Ge+her The Hardest Part Of ... 2000-09-02       3    92
-## # … with 5,297 more rows
+## # ℹ 5,297 more rows
 ```
 
 Now that we have all the week numbers in one variable and all the rank values in another, we're in a good position to visualize how song ranks vary over time.
@@ -393,6 +688,17 @@ df <- tribble(
    "B",  140,  115,
    "C",  120,  125
 )
+
+df
+```
+
+```
+## # A tibble: 3 × 3
+##   id      bp1   bp2
+##   <chr> <dbl> <dbl>
+## 1 A       100   120
+## 2 B       140   115
+## 3 C       120   125
 ```
 
 We want our new dataset to have three variables: `id` (already exists), `measurement` (the column names), and `value` (the cell values).
@@ -461,25 +767,25 @@ who2
 
 ```
 ## # A tibble: 7,240 × 58
-##    country  year sp_m_…¹ sp_m_…² sp_m_…³ sp_m_…⁴ sp_m_…⁵ sp_m_…⁶ sp_m_65 sp_f_…⁷
-##    <chr>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>
-##  1 Afghan…  1980      NA      NA      NA      NA      NA      NA      NA      NA
-##  2 Afghan…  1981      NA      NA      NA      NA      NA      NA      NA      NA
-##  3 Afghan…  1982      NA      NA      NA      NA      NA      NA      NA      NA
-##  4 Afghan…  1983      NA      NA      NA      NA      NA      NA      NA      NA
-##  5 Afghan…  1984      NA      NA      NA      NA      NA      NA      NA      NA
-##  6 Afghan…  1985      NA      NA      NA      NA      NA      NA      NA      NA
-##  7 Afghan…  1986      NA      NA      NA      NA      NA      NA      NA      NA
-##  8 Afghan…  1987      NA      NA      NA      NA      NA      NA      NA      NA
-##  9 Afghan…  1988      NA      NA      NA      NA      NA      NA      NA      NA
-## 10 Afghan…  1989      NA      NA      NA      NA      NA      NA      NA      NA
-## # … with 7,230 more rows, 48 more variables: sp_f_1524 <dbl>, sp_f_2534 <dbl>,
-## #   sp_f_3544 <dbl>, sp_f_4554 <dbl>, sp_f_5564 <dbl>, sp_f_65 <dbl>,
-## #   sn_m_014 <dbl>, sn_m_1524 <dbl>, sn_m_2534 <dbl>, sn_m_3544 <dbl>,
-## #   sn_m_4554 <dbl>, sn_m_5564 <dbl>, sn_m_65 <dbl>, sn_f_014 <dbl>,
-## #   sn_f_1524 <dbl>, sn_f_2534 <dbl>, sn_f_3544 <dbl>, sn_f_4554 <dbl>,
-## #   sn_f_5564 <dbl>, sn_f_65 <dbl>, ep_m_014 <dbl>, ep_m_1524 <dbl>,
-## #   ep_m_2534 <dbl>, ep_m_3544 <dbl>, ep_m_4554 <dbl>, ep_m_5564 <dbl>, …
+##    country      year sp_m_014 sp_m_1524 sp_m_2534 sp_m_3544 sp_m_4554 sp_m_5564
+##    <chr>       <dbl>    <dbl>     <dbl>     <dbl>     <dbl>     <dbl>     <dbl>
+##  1 Afghanistan  1980       NA        NA        NA        NA        NA        NA
+##  2 Afghanistan  1981       NA        NA        NA        NA        NA        NA
+##  3 Afghanistan  1982       NA        NA        NA        NA        NA        NA
+##  4 Afghanistan  1983       NA        NA        NA        NA        NA        NA
+##  5 Afghanistan  1984       NA        NA        NA        NA        NA        NA
+##  6 Afghanistan  1985       NA        NA        NA        NA        NA        NA
+##  7 Afghanistan  1986       NA        NA        NA        NA        NA        NA
+##  8 Afghanistan  1987       NA        NA        NA        NA        NA        NA
+##  9 Afghanistan  1988       NA        NA        NA        NA        NA        NA
+## 10 Afghanistan  1989       NA        NA        NA        NA        NA        NA
+## # ℹ 7,230 more rows
+## # ℹ 50 more variables: sp_m_65 <dbl>, sp_f_014 <dbl>, sp_f_1524 <dbl>,
+## #   sp_f_2534 <dbl>, sp_f_3544 <dbl>, sp_f_4554 <dbl>, sp_f_5564 <dbl>,
+## #   sp_f_65 <dbl>, sn_m_014 <dbl>, sn_m_1524 <dbl>, sn_m_2534 <dbl>,
+## #   sn_m_3544 <dbl>, sn_m_4554 <dbl>, sn_m_5564 <dbl>, sn_m_65 <dbl>,
+## #   sn_f_014 <dbl>, sn_f_1524 <dbl>, sn_f_2534 <dbl>, sn_f_3544 <dbl>,
+## #   sn_f_4554 <dbl>, sn_f_5564 <dbl>, sn_f_65 <dbl>, ep_m_014 <dbl>, …
 ```
 
 This dataset, collected by the World Health Organisation, records information about tuberculosis diagnoses.
@@ -517,7 +823,7 @@ who2 |>
 ##  8 Afghanistan  1980 sp        f      014      NA
 ##  9 Afghanistan  1980 sp        f      1524     NA
 ## 10 Afghanistan  1980 sp        f      2534     NA
-## # … with 405,430 more rows
+## # ℹ 405,430 more rows
 ```
 
 An alternative to `names_sep` is `names_pattern`, which you can use to extract variables from more complicated naming scenarios, once you've learned about regular expressions in @sec-regular-expressions.
@@ -610,20 +916,19 @@ cms_patient_experience
 
 ```
 ## # A tibble: 500 × 5
-##    org_pac_id org_nm                               measure_cd   measur…¹ prf_r…²
-##    <chr>      <chr>                                <chr>        <chr>      <dbl>
-##  1 0446157747 USC CARE MEDICAL GROUP INC           CAHPS_GRP_1  CAHPS f…      63
-##  2 0446157747 USC CARE MEDICAL GROUP INC           CAHPS_GRP_2  CAHPS f…      87
-##  3 0446157747 USC CARE MEDICAL GROUP INC           CAHPS_GRP_3  CAHPS f…      86
-##  4 0446157747 USC CARE MEDICAL GROUP INC           CAHPS_GRP_5  CAHPS f…      57
-##  5 0446157747 USC CARE MEDICAL GROUP INC           CAHPS_GRP_8  CAHPS f…      85
-##  6 0446157747 USC CARE MEDICAL GROUP INC           CAHPS_GRP_12 CAHPS f…      24
-##  7 0446162697 ASSOCIATION OF UNIVERSITY PHYSICIANS CAHPS_GRP_1  CAHPS f…      59
-##  8 0446162697 ASSOCIATION OF UNIVERSITY PHYSICIANS CAHPS_GRP_2  CAHPS f…      85
-##  9 0446162697 ASSOCIATION OF UNIVERSITY PHYSICIANS CAHPS_GRP_3  CAHPS f…      83
-## 10 0446162697 ASSOCIATION OF UNIVERSITY PHYSICIANS CAHPS_GRP_5  CAHPS f…      63
-## # … with 490 more rows, and abbreviated variable names ¹​measure_title,
-## #   ²​prf_rate
+##    org_pac_id org_nm                           measure_cd measure_title prf_rate
+##    <chr>      <chr>                            <chr>      <chr>            <dbl>
+##  1 0446157747 USC CARE MEDICAL GROUP INC       CAHPS_GRP… CAHPS for MI…       63
+##  2 0446157747 USC CARE MEDICAL GROUP INC       CAHPS_GRP… CAHPS for MI…       87
+##  3 0446157747 USC CARE MEDICAL GROUP INC       CAHPS_GRP… CAHPS for MI…       86
+##  4 0446157747 USC CARE MEDICAL GROUP INC       CAHPS_GRP… CAHPS for MI…       57
+##  5 0446157747 USC CARE MEDICAL GROUP INC       CAHPS_GRP… CAHPS for MI…       85
+##  6 0446157747 USC CARE MEDICAL GROUP INC       CAHPS_GRP… CAHPS for MI…       24
+##  7 0446162697 ASSOCIATION OF UNIVERSITY PHYSI… CAHPS_GRP… CAHPS for MI…       59
+##  8 0446162697 ASSOCIATION OF UNIVERSITY PHYSI… CAHPS_GRP… CAHPS for MI…       85
+##  9 0446162697 ASSOCIATION OF UNIVERSITY PHYSI… CAHPS_GRP… CAHPS for MI…       83
+## 10 0446162697 ASSOCIATION OF UNIVERSITY PHYSI… CAHPS_GRP… CAHPS for MI…       63
+## # ℹ 490 more rows
 ```
 
 The core unit being studied is an organization, but each organization is spread across six rows, with one row for each measurement taken in the survey organization.
@@ -663,21 +968,20 @@ cms_patient_experience |>
 
 ```
 ## # A tibble: 500 × 9
-##    org_pac_id org_nm     measu…¹ CAHPS…² CAHPS…³ CAHPS…⁴ CAHPS…⁵ CAHPS…⁶ CAHPS…⁷
-##    <chr>      <chr>      <chr>     <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>
-##  1 0446157747 USC CARE … CAHPS …      63      NA      NA      NA      NA      NA
-##  2 0446157747 USC CARE … CAHPS …      NA      87      NA      NA      NA      NA
-##  3 0446157747 USC CARE … CAHPS …      NA      NA      86      NA      NA      NA
-##  4 0446157747 USC CARE … CAHPS …      NA      NA      NA      57      NA      NA
-##  5 0446157747 USC CARE … CAHPS …      NA      NA      NA      NA      85      NA
-##  6 0446157747 USC CARE … CAHPS …      NA      NA      NA      NA      NA      24
-##  7 0446162697 ASSOCIATI… CAHPS …      59      NA      NA      NA      NA      NA
-##  8 0446162697 ASSOCIATI… CAHPS …      NA      85      NA      NA      NA      NA
-##  9 0446162697 ASSOCIATI… CAHPS …      NA      NA      83      NA      NA      NA
-## 10 0446162697 ASSOCIATI… CAHPS …      NA      NA      NA      63      NA      NA
-## # … with 490 more rows, and abbreviated variable names ¹​measure_title,
-## #   ²​CAHPS_GRP_1, ³​CAHPS_GRP_2, ⁴​CAHPS_GRP_3, ⁵​CAHPS_GRP_5, ⁶​CAHPS_GRP_8,
-## #   ⁷​CAHPS_GRP_12
+##    org_pac_id org_nm           measure_title CAHPS_GRP_1 CAHPS_GRP_2 CAHPS_GRP_3
+##    <chr>      <chr>            <chr>               <dbl>       <dbl>       <dbl>
+##  1 0446157747 USC CARE MEDICA… CAHPS for MI…          63          NA          NA
+##  2 0446157747 USC CARE MEDICA… CAHPS for MI…          NA          87          NA
+##  3 0446157747 USC CARE MEDICA… CAHPS for MI…          NA          NA          86
+##  4 0446157747 USC CARE MEDICA… CAHPS for MI…          NA          NA          NA
+##  5 0446157747 USC CARE MEDICA… CAHPS for MI…          NA          NA          NA
+##  6 0446157747 USC CARE MEDICA… CAHPS for MI…          NA          NA          NA
+##  7 0446162697 ASSOCIATION OF … CAHPS for MI…          59          NA          NA
+##  8 0446162697 ASSOCIATION OF … CAHPS for MI…          NA          85          NA
+##  9 0446162697 ASSOCIATION OF … CAHPS for MI…          NA          NA          83
+## 10 0446162697 ASSOCIATION OF … CAHPS for MI…          NA          NA          NA
+## # ℹ 490 more rows
+## # ℹ 3 more variables: CAHPS_GRP_5 <dbl>, CAHPS_GRP_8 <dbl>, CAHPS_GRP_12 <dbl>
 ```
 
 The output doesn't look quite right; we still seem to have multiple rows for each organization.
@@ -695,20 +999,20 @@ cms_patient_experience |>
 
 ```
 ## # A tibble: 95 × 8
-##    org_pac_id org_nm             CAHPS…¹ CAHPS…² CAHPS…³ CAHPS…⁴ CAHPS…⁵ CAHPS…⁶
-##    <chr>      <chr>                <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>
-##  1 0446157747 USC CARE MEDICAL …      63      87      86      57      85      24
-##  2 0446162697 ASSOCIATION OF UN…      59      85      83      63      88      22
-##  3 0547164295 BEAVER MEDICAL GR…      49      NA      75      44      73      12
-##  4 0749333730 CAPE PHYSICIANS A…      67      84      85      65      82      24
-##  5 0840104360 ALLIANCE PHYSICIA…      66      87      87      64      87      28
-##  6 0840109864 REX HOSPITAL INC        73      87      84      67      91      30
-##  7 0840513552 SCL HEALTH MEDICA…      58      83      76      58      78      26
-##  8 0941545784 GRITMAN MEDICAL C…      46      86      81      54      NA      25
-##  9 1052612785 COMMUNITY MEDICAL…      65      84      80      58      87      29
-## 10 1254237779 OUR LADY OF LOURD…      61      NA      NA      65      NA      17
-## # … with 85 more rows, and abbreviated variable names ¹​CAHPS_GRP_1,
-## #   ²​CAHPS_GRP_2, ³​CAHPS_GRP_3, ⁴​CAHPS_GRP_5, ⁵​CAHPS_GRP_8, ⁶​CAHPS_GRP_12
+##    org_pac_id org_nm CAHPS_GRP_1 CAHPS_GRP_2 CAHPS_GRP_3 CAHPS_GRP_5 CAHPS_GRP_8
+##    <chr>      <chr>        <dbl>       <dbl>       <dbl>       <dbl>       <dbl>
+##  1 0446157747 USC C…          63          87          86          57          85
+##  2 0446162697 ASSOC…          59          85          83          63          88
+##  3 0547164295 BEAVE…          49          NA          75          44          73
+##  4 0749333730 CAPE …          67          84          85          65          82
+##  5 0840104360 ALLIA…          66          87          87          64          87
+##  6 0840109864 REX H…          73          87          84          67          91
+##  7 0840513552 SCL H…          58          83          76          58          78
+##  8 0941545784 GRITM…          46          86          81          54          NA
+##  9 1052612785 COMMU…          65          84          80          58          87
+## 10 1254237779 OUR L…          61          NA          NA          65          NA
+## # ℹ 85 more rows
+## # ℹ 1 more variable: CAHPS_GRP_12 <dbl>
 ```
 
 This gives us the output that we're looking for.
@@ -728,6 +1032,18 @@ df <- tribble(
   "A",        "bp2",    120,
   "A",        "bp3",    105
 )
+df
+```
+
+```
+## # A tibble: 5 × 3
+##   id    measurement value
+##   <chr> <chr>       <dbl>
+## 1 A     bp1           100
+## 2 B     bp1           140
+## 3 B     bp2           115
+## 4 A     bp2           120
+## 5 A     bp3           105
 ```
 
 We'll take the values from the `value` column and the names from the `measurement` column:

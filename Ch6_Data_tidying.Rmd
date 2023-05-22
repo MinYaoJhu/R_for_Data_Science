@@ -137,12 +137,116 @@ ggplot(table1, aes(x = year, y = cases)) +
 
 1.  For each of the sample tables, describe what each observation and each column represents.
 
+```{r}
+table1
+```
+
+In table table1, each row represents a (country, year) combination. The columns cases and population contain the values for those variables.
+
+```{r}
+table2
+```
+
+In table2, each row represents a (country, year, variable) combination. The column count contains the values of variables cases and population in separate rows.
+
+```{r}
+table3
+```
+
+In table3, each row represents a (country, type) combination. Each row represents a country & type, each column represents a year, and the cells are the value of the table’s variable for that country & type and year.
+
 2.  Sketch out the process you'd use to calculate the `rate` for `table2` and `table3`.
     You will need to perform four operations:
 
+```{r}
+table2
+```
+
     a.  Extract the number of TB cases per country per year.
+
+```{r}
+t2_cases <- filter(table2, type == "cases") |> 
+  rename(cases = count) |> 
+  arrange(country, year)
+t2_cases
+```
+
+
     b.  Extract the matching population per country per year.
+    
+```{r}
+t2_population <- filter(table2, type == "population") |> 
+  rename(population = count) |> 
+  arrange(country, year)
+t2_population
+```
+
+
     c.  Divide cases by population, and multiply by 10000.
+
+```{r}
+merge(t2_cases,t2_population,by=c("country","year")) |> 
+  select(-c(type.x,type.y))
+```
+
+
+```{r}
+t2_cases_per_cap <- merge(t2_cases,t2_population,by=c("country","year")) |> 
+  select(-c(type.x,type.y)) |> 
+  mutate(cases_per_cap = (cases / population) * 10000) |> 
+  select(country, year, cases_per_cap)
+t2_cases_per_cap
+```
+
+    
+    d.  Store back in the appropriate place.
+    
+```{r}
+t2_cases_per_cap <- t2_cases_per_cap |> 
+  mutate(type = "cases_per_cap") |> 
+  rename(count = cases_per_cap)
+t2_cases_per_cap
+```
+
+```{r}
+bind_rows(table2, t2_cases_per_cap) |> 
+  arrange(country, year, type, count)
+```
+
+
+```{r}
+table3
+```
+
+    a.  Extract the number of TB cases per country per year.
+    
+```{r}
+t3_cases <- filter(table3, type == "cases") |> 
+  arrange(country)
+t3_cases
+```
+
+    
+    b.  Extract the matching population per country per year.
+    
+```{r}
+t3_population <- filter(table3, type == "population") |> 
+  arrange(country)
+t3_population
+```
+
+    c.  Divide cases by population, and multiply by 10000.
+    
+```{r}
+t3_cases_per_cap <-
+  tibble(
+    country = t3_cases$country,
+    `1999` = t3_cases[["1999"]] / t3_population[["1999"]] * 10000,
+    `2000` = t3_cases[["2000"]] / t3_population[["2000"]] * 10000
+  )
+t3_cases_per_cap
+```
+    
     d.  Store back in the appropriate place.
 
     You haven't yet learned all the functions you'd need to actually perform these operations, but you should still be able to think through the transformations you'd need.
@@ -276,6 +380,8 @@ df <- tribble(
    "B",  140,  115,
    "C",  120,  125
 )
+
+df
 ```
 
 We want our new dataset to have three variables: `id` (already exists), `measurement` (the column names), and `value` (the cell values).
@@ -507,6 +613,7 @@ df <- tribble(
   "A",        "bp2",    120,
   "A",        "bp3",    105
 )
+df
 ```
 
 We'll take the values from the `value` column and the names from the `measurement` column:
