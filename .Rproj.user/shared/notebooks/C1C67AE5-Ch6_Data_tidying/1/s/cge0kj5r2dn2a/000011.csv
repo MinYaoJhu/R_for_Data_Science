@@ -1,0 +1,5 @@
+"0",""
+"0","# Compute total cases per year"
+"0","table1 |> "
+"0","  group_by(year) |> "
+"0","  summarize(total_cases = sum(cases))"

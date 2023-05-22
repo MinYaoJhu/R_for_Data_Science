@@ -1,0 +1,7 @@
+"0","household |> "
+"0","  pivot_longer("
+"0","    cols = !family, "
+"0","    names_to = c("".value"", ""child""), "
+"0","    names_sep = ""_"", "
+"0","    values_drop_na = TRUE"
+"0","  )"

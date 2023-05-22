@@ -1,0 +1,7 @@
+"0","#| echo: false"
+"0",""
+"0","table2 <- table1 |> "
+"0","  pivot_longer(cases:population, names_to = ""type"", values_to = ""count"")"
+"0",""
+"0","table3 <- table2 |> "
+"0","  pivot_wider(names_from = year, values_from = count)"

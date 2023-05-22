@@ -1,0 +1,30 @@
+"0","#| label: fig-pivot-names-and-values"
+"2","Warning messages:
+"
+"2","1: "
+"2","In value[[3L]](cond) :"
+"2"," Failed to parse chunk options in body:
+Error in parse(text = code, keep.source = FALSE): <text>:1:42: unexpected symbol
+1: alist( label: fig-pivot-names-and-values echo
+                                             ^
+
+"
+"2","2: "
+"2","In opts$engine <- unlist(strsplit(rmdChunkOpts, split = ""(\\s|,)+""))[[1]] :"
+"2","
+ "
+"2"," Coercing LHS to a list
+"
+"0","#| echo: false"
+"0","#| fig-cap: >"
+"0","#|   Pivoting with `names_to = c("".value"", ""id"")` splits the column names"
+"0","#|   into two components: the first part determines the output column"
+"0","#|   name (`x` or `y`), and the second part determines the value of the"
+"0","#|   `id` column."
+"0","#| fig-alt: >"
+"0","#|   A diagram that uses color to illustrate how the special "".value"""
+"0","#|   sentinel works. The input has names ""x_1"", ""x_2"", ""y_1"", and ""y_2"","
+"0","#|   and we want to use the first component (""x"", ""y"") as a variable name"
+"0","#|   and the second (""1"", ""2"") as the value for a new ""id"" column."
+"0",""
+"0","knitr::include_graphics(""diagrams/tidy-data/names-and-values.png"", dpi = 270)"

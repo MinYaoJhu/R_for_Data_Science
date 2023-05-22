@@ -1,0 +1,4 @@
+"0","t2_cases <- filter(table2, type == ""cases"") |> "
+"0","  rename(cases = count) |> "
+"0","  arrange(country, year)"
+"0","t2_cases"

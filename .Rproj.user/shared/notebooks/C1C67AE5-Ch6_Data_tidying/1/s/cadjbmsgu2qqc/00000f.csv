@@ -1,0 +1,2 @@
+"0","merge(t2_cases,t2_population,by=c(""country"",""year"")) |> "
+"0","  select(-c(type.x,type.y))"

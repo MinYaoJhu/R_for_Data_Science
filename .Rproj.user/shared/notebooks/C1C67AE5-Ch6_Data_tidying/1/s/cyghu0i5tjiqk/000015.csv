@@ -1,0 +1,5 @@
+"0","t2_cases_per_cap <- merge(t2_cases,t2_population,by=c(""country"",""year"")) |> "
+"0","  select(-c(type.x,type.y)) |> "
+"0","  mutate(cases_per_cap = (cases / population) * 10000) |> "
+"0","  select(country, year, cases_per_cap)"
+"0","t2_cases_per_cap"

@@ -1,0 +1,7 @@
+"0","t3_cases_per_cap <-"
+"0","  tibble("
+"0","    country = t3_cases$country,"
+"0","    `1999` = t3_cases[[""1999""]] / t3_population[[""1999""]] * 10000,"
+"0","    `2000` = t3_cases[[""2000""]] / t3_population[[""2000""]] * 10000"
+"0","  )"
+"0","t3_cases_per_cap"

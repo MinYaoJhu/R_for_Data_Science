@@ -1,0 +1,3 @@
+"0","t3_cases <- filter(table3, type == ""cases"") |> "
+"0","  arrange(country)"
+"0","t3_cases"
