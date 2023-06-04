@@ -388,15 +388,40 @@ plots or long sequences of dplyr manipulations. The key to using the
 script editor effectively is to memorize one of the most important
 keyboard shortcuts: Cmd/Ctrl + Enter. This executes the current R
 expression in the console. For example, take the code below.</p>
-<pre class="r"><code>library(dplyr)
-library(nycflights13)
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(nycflights13)
 
 not_cancelled &lt;- flights |&gt; 
-  filter(!is.na(dep_delay)█, !is.na(arr_delay))
+  filter(!is.na(dep_delay), !is.na(arr_delay))
 
 not_cancelled |&gt; 
   group_by(year, month, day) |&gt; 
   summarize(mean = mean(dep_delay))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;year&#39;, &#39;month&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre><code>## # A tibble: 365 × 4
+## # Groups:   year, month [12]
+##     year month   day  mean
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
+##  1  2013     1     1 11.4 
+##  2  2013     1     2 13.7 
+##  3  2013     1     3 10.9 
+##  4  2013     1     4  8.97
+##  5  2013     1     5  5.73
+##  6  2013     1     6  7.15
+##  7  2013     1     7  5.42
+##  8  2013     1     8  2.56
+##  9  2013     1     9  2.30
+## 10  2013     1    10  2.84
+## # ℹ 355 more rows</code></pre>
 <p>If your cursor is at █, pressing Cmd/Ctrl + Enter will run the
 complete command that generates <code>not_cancelled</code>. It will also
 move the cursor to the following statement (beginning with
@@ -666,10 +691,73 @@ forward slashes.</p>
 <h2>Exercises</h2>
 <ol style="list-style-type: decimal">
 <li><p>Go to the RStudio Tips Twitter account, <a href="https://twitter.com/rstudiotips" class="uri">https://twitter.com/rstudiotips</a> and find one tip that
-looks interesting. Practice using it!</p></li>
+looks interesting. Practice using it!</p>
+<div class="line-block"><em>Did you know that the RStudio IDE has a
+visual markdown editor?</em><br />
+<em>Embed content with shortcuts or just drag-and-drop (h/t <a href="https://twitter.com/thomas_mock">@thomas_mock</a>)“}</em><br />
+<em>Edit &amp; see changes in real-time</em><br />
+<em>Get support for technical writing</em><br />
+<br />
+<em>Here are some features that you should know:</em><br />
+<br />
+<a href="https://posit.co/blog/exploring-rstudio-visual-markdown-editor/" class="uri">https://posit.co/blog/exploring-rstudio-visual-markdown-editor/</a><br />
+<br />
+<br />
+<br />
+<br />
+</div></li>
 <li><p>What other common mistakes will RStudio diagnostics report? Read
 <a href="https://support.posit.co/hc/en-us/articles/205753617-Code-Diagnostics" class="uri">https://support.posit.co/hc/en-us/articles/205753617-Code-Diagnostics</a>
-to find out.</p></li>
+to find out.</p>
+<div class="line-block"><strong>Show Diagnostics for R</strong><br />
+Toggle the display of R code diagnostics.<br />
+<br />
+<br />
+<strong>Enable diagnostics within R function calls</strong><br />
+Controls whether diagnostics are performed within function calls,
+e.g. <code>dplyr::select(mtcars, mpg, cyl)</code>. Toggle this if your
+code makes heavy use of non-standard evaluation, and RStudio is unable
+to produce correct diagnostics for you.<br />
+<br />
+<br />
+<strong>Check arguments to R function calls</strong><br />
+Try to detect whether a particular call to a function will succeed. The
+diagnostics engine will report if it detects missing arguments,
+unmatched arguments, partially matched arguments, and too many
+arguments.<br />
+<br />
+For example, in the code sample below, RStudio detects that the function
+<code>add_numbers</code> is missing the <code>y</code> argument. Note
+that it is not necessary for <code>add_numbers</code> to exist in the
+current environment (ie, within the running R session)<br />
+<br />
+<br />
+<strong>Warn if variable used has no definition in scope</strong><br />
+Warn if a symbol is used with no definition in the current, or parent,
+scope. The diagnostics engine will supply a suggestion if there appears
+to be a typo in the symbol’s name; that is, if a symbol with a similar
+name exists in scope as well.<br />
+<br />
+<br />
+<strong>Warn if variable is defined but not used</strong><br />
+This diagnostic helps to identify is a variable is created but never
+used. This can be helpful when attempting to clean up old code, or in
+diagnosing other errors (wherein you believe a particular variable
+should be used, but isn’t).<br />
+<br />
+In the following example, the variable <code>result</code> is assigned
+but never used or returned; instead, the sum is re-computed and then
+returned. <br />
+<br />
+<strong>Provide R style diagnostics (e.g. whitespace)</strong><br />
+The style diagnostic checks to see if your code conforms to <a href="http://adv-r.had.co.nz/Style.html">Hadley Wickham’s style
+guide</a>, and reports style warnings when encountered. In particular,
+the diagnostics engine attempts to identify inappropriate use (or lack
+thereof) of whitespace.<br />
+<br />
+Currently, the style diagnostics feature is not user configurable; this
+may be addressed in an upcoming release.<br />
+</div></li>
 </ol>
 </div>
 <div id="summary" class="section level2">
