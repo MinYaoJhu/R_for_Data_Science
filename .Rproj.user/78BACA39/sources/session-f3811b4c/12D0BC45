@@ -3,7 +3,7 @@
     "path": "D:/Oldroyd_lab/GitHub/R_for_Data_Science/Ch7_Workflow_scripts_and_projects.Rmd",
     "project_path": "Ch7_Workflow_scripts_and_projects.Rmd",
     "type": "r_markdown",
-    "hash": "1807671457",
+    "hash": "506604914",
     "contents": "",
     "dirty": false,
     "created": 1685901047170.0,
@@ -13,15 +13,20 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "52,17",
-        "scrollLine": "40"
+        "cursorPosition": "370,0",
+        "scrollLine": "395",
+        "rmdVisualMode": "false",
+        "rmdVisualCollapsedChunks": "",
+        "rmdVisualModeLocation": "18019:7770.8798828125",
+        "rmdVisualWrapConfigured": "true",
+        "docOutlineVisible": "1"
     },
     "folds": "",
-    "lastKnownWriteTime": 1685904513,
+    "lastKnownWriteTime": 1685906729,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1685904513963,
+    "last_content_update": 1685906729064,
     "read_only": false,
     "read_only_alternatives": []
 }

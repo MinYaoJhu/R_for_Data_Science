@@ -5,6 +5,9 @@ date: "2023-06-04"
 output: 
   html_document: 
     keep_md: yes
+editor_options: 
+  markdown: 
+    wrap: sentence
 ---
 
 # Workflow: scripts and projects {#sec-workflow-scripts-projects}
@@ -38,14 +41,57 @@ For example, take the code below.
 
 ```r
 library(dplyr)
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
 library(nycflights13)
 
 not_cancelled <- flights |> 
-  filter(!is.na(dep_delay)█, !is.na(arr_delay))
+  filter(!is.na(dep_delay), !is.na(arr_delay))
 
 not_cancelled |> 
   group_by(year, month, day) |> 
   summarize(mean = mean(dep_delay))
+```
+
+```
+## `summarise()` has grouped output by 'year', 'month'. You can override using the
+## `.groups` argument.
+```
+
+```
+## # A tibble: 365 × 4
+## # Groups:   year, month [12]
+##     year month   day  mean
+##    <int> <int> <int> <dbl>
+##  1  2013     1     1 11.4 
+##  2  2013     1     2 13.7 
+##  3  2013     1     3 10.9 
+##  4  2013     1     4  8.97
+##  5  2013     1     5  5.73
+##  6  2013     1     6  7.15
+##  7  2013     1     7  5.42
+##  8  2013     1     8  2.56
+##  9  2013     1     9  2.30
+## 10  2013     1    10  2.84
+## # ℹ 355 more rows
 ```
 
 If your cursor is at █, pressing Cmd/Ctrl + Enter will run the complete command that generates `not_cancelled`.
@@ -91,31 +137,35 @@ Three important principles for file naming are as follows:
 
 For example, suppose you have the following files in a project folder.
 
-    alternative model.R
-    code for exploratory analysis.r
-    finalreport.qmd
-    FinalReport.qmd
-    fig 1.png
-    Figure_02.png
-    model_first_try.R
-    run-first.r
-    temp.txt
+```         
+alternative model.R
+code for exploratory analysis.r
+finalreport.qmd
+FinalReport.qmd
+fig 1.png
+Figure_02.png
+model_first_try.R
+run-first.r
+temp.txt
+```
 
-There are a variety of problems here: it's hard to find which file to run first, file names contain spaces, there are two files with the same name but different capitalization (`finalreport` vs. `FinalReport`[^workflow-scripts-1]), and some names don't describe their contents (`run-first` and `temp`).
+There are a variety of problems here: it's hard to find which file to run first, file names contain spaces, there are two files with the same name but different capitalization (`finalreport` vs. `FinalReport`[^1]), and some names don't describe their contents (`run-first` and `temp`).
 
-[^workflow-scripts-1]: Not to mention that you're tempting fate by using "final" in the name 😆 The comic Piled Higher and Deeper has a [fun strip on this](https://phdcomics.com/comics/archive.php?comicid=1531).
+[^1]: Not to mention that you're tempting fate by using "final" in the name 😆 The comic Piled Higher and Deeper has a [fun strip on this](https://phdcomics.com/comics/archive.php?comicid=1531).
 
 Here's better way of naming and organizing the same set of files:
 
-    01-load-data.R
-    02-exploratory-analysis.R
-    03-model-approach-1.R
-    04-model-approach-2.R
-    fig-01.png
-    fig-02.png
-    report-2022-03-20.qmd
-    report-2022-04-02.qmd
-    report-draft-notes.txt
+```         
+01-load-data.R
+02-exploratory-analysis.R
+03-model-approach-1.R
+04-model-approach-2.R
+fig-01.png
+fig-02.png
+report-2022-03-20.qmd
+report-2022-04-02.qmd
+report-draft-notes.txt
+```
 
 Numbering the key scripts make it obvious in which order to run them and a consistent naming scheme makes it easier to see what varies.
 Additionally, the figures are labelled similarly, the reports are distinguished by dates included in the file names, and `temp` is renamed to `report-draft-notes` to better describe its contents.
@@ -142,11 +192,11 @@ With your R scripts (and your data files), you can recreate the environment.
 With only your environment, it's much harder to recreate your R scripts: you'll either have to retype a lot of code from memory (inevitably making mistakes along the way) or you'll have to carefully mine your R history.
 
 To help keep your R scripts as the source of truth for your analysis, we highly recommend that you instruct RStudio not to preserve your workspace between sessions.
-You can do this either by running `usethis::use_blank_slate()`[^workflow-scripts-2] or by mimicking the options shown in @fig-blank-slate. This will cause you some short-term pain, because now when you restart RStudio, it will no longer remember the code that you ran last time nor will the objects you created or datasets you read be available to use.
+You can do this either by running `usethis::use_blank_slate()`[^2] or by mimicking the options shown in @fig-blank-slate. This will cause you some short-term pain, because now when you restart RStudio, it will no longer remember the code that you ran last time nor will the objects you created or datasets you read be available to use.
 But this short-term pain saves you long-term agony because it forces you to capture all important procedures in your code.
 There's nothing worse than discovering three months after the fact that you've only stored the results of an important calculation in your environment, not the calculation itself in your code.
 
-[^workflow-scripts-2]: If you don't have usethis installed, you can install it with `install.packages("usethis")`.
+[^2]: If you don't have usethis installed, you can install it with `install.packages("usethis")`.
 
 <div class="figure">
 <img src="diagrams/rstudio/clean-slate.png" alt="RStudio Global Options window where the option Restore .RData into workspace at startup is not checked. Also, the option Save workspace to .RData on exit is set to Never.
@@ -284,8 +334,57 @@ That makes life frustrating, so we recommend always using the Linux/Mac style wi
 1.  Go to the RStudio Tips Twitter account, <https://twitter.com/rstudiotips> and find one tip that looks interesting.
     Practice using it!
 
+    | *Did you know that the RStudio IDE has a visual markdown editor?*
+    | *Embed content with shortcuts or just drag-and-drop (h/t [\@thomas_mock](https://twitter.com/thomas_mock))"}*
+    | *Edit & see changes in real-time*
+    | *Get support for technical writing*
+    | 
+    | *Here are some features that you should know:*
+    | 
+    | <https://posit.co/blog/exploring-rstudio-visual-markdown-editor/>
+    | 
+    | 
+    | 
+    | 
+    | 
+
 2.  What other common mistakes will RStudio diagnostics report?
     Read <https://support.posit.co/hc/en-us/articles/205753617-Code-Diagnostics> to find out.
+
+    | **Show Diagnostics for R**
+    | Toggle the display of R code diagnostics.
+    | 
+    | 
+    | **Enable diagnostics within R function calls**
+    | Controls whether diagnostics are performed within function calls, e.g. `dplyr::select(mtcars, mpg, cyl)`. 
+      Toggle this if your code makes heavy use of non-standard evaluation, and RStudio is unable to produce correct diagnostics for you.
+    | 
+    | 
+    | **Check arguments to R function calls**
+    | Try to detect whether a particular call to a function will succeed. 
+      The diagnostics engine will report if it detects missing arguments, unmatched arguments, partially matched arguments, and too many arguments.
+    | 
+    | For example, in the code sample below, RStudio detects that the function `add_numbers` is missing the `y` argument. 
+      Note that it is not necessary for `add_numbers` to exist in the current environment (ie, within the running R session)
+    | 
+    | 
+    | **Warn if variable used has no definition in scope**
+    | Warn if a symbol is used with no definition in the current, or parent, scope. 
+      The diagnostics engine will supply a suggestion if there appears to be a typo in the symbol's name; that is, if a symbol with a similar name exists in scope as well.
+    | 
+    | 
+    | **Warn if variable is defined but not used**
+    | This diagnostic helps to identify is a variable is created but never used. 
+      This can be helpful when attempting to clean up old code, or in diagnosing other errors (wherein you believe a particular variable should be used, but isn't).
+    | 
+    | In the following example, the variable `result` is assigned but never used or returned; instead, the sum is re-computed and then returned. 
+    | 
+    | **Provide R style diagnostics (e.g. whitespace)**
+    | The style diagnostic checks to see if your code conforms to [Hadley Wickham's style guide](http://adv-r.had.co.nz/Style.html), and reports style warnings when encountered. 
+      In particular, the diagnostics engine attempts to identify inappropriate use (or lack thereof) of whitespace.
+    | 
+    | Currently, the style diagnostics feature is not user configurable; this may be addressed in an upcoming release.
+    | 
 
 ## Summary
 
