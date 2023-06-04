@@ -1,0 +1,5 @@
+"0","not_cancelled |> 
+  group_by(year, month, day) |> 
+  summarize(mean = mean(dep_delay))
+"
+"2","`summarise()` has grouped output by 'year', 'month'. You can override using the `.groups` argument."

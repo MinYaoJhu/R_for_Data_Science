@@ -1,0 +1,7 @@
+"0","#| results: ""asis"""
+"0","#| echo: false"
+"0","source(""_common.R"")"
+"2","Warning: cannot open file '_common.R': No such file or directory"
+"2","Error in file(filename, ""r"", encoding = encoding) : 
+  cannot open the connection
+"

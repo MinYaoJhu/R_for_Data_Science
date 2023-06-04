@@ -1,0 +1,25 @@
+"0","#| echo: false"
+"2","Warning messages:
+"
+"2","1: "
+"2","In value[[3L]](cond) :"
+"2"," Failed to parse chunk options in body:
+Error in parse(text = code, keep.source = FALSE): <text>:1:20: unexpected symbol
+1: alist( echo: false out
+                       ^
+
+"
+"2","2: "
+"2","In opts$engine <- unlist(strsplit(rmdChunkOpts, split = ""(\\s|,)+""))[[1]] :"
+"2","
+ "
+"2"," Coercing LHS to a list
+"
+"0","#| out-width: ~"
+"0","#| fig-alt: >"
+"0","#|   Script editor with the script 3 == NA. A yellow exclamation mark "
+"0","#|   indicates that there may be a potential problem. Hovering over the "
+"0","#|   exclamation mark shows a text box with the text use is.na to check "
+"0","#|   whether expression evaluates to NA."
+"0",""
+"0","knitr::include_graphics(""screenshots/rstudio-diagnostic-warn.png"")"

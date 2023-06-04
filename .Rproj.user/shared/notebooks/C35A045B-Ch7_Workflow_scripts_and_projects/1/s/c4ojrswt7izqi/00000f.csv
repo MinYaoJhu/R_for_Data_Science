@@ -1,0 +1,6 @@
+"0","#| echo: false"
+"0","#| fig-alt: >"
+"0","#|   The Console tab shows the current working directory as "
+"0","#|   ~/Documents/r4ds."
+"0","#| out-width: ~"
+"0","knitr::include_graphics(""screenshots/rstudio-wd.png"")"
