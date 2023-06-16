@@ -367,6 +367,7 @@ That makes life frustrating, so we recommend always using the Linux/Mac style wi
     | 
     | 
     | 
+    | 
 
 2.  What other common mistakes will RStudio diagnostics report?
     Read <https://support.posit.co/hc/en-us/articles/205753617-Code-Diagnostics> to find out.
@@ -375,17 +376,21 @@ That makes life frustrating, so we recommend always using the Linux/Mac style wi
     | Toggle the display of R code diagnostics.
     | 
     | 
+    | 
     | **Enable diagnostics within R function calls**
     | Controls whether diagnostics are performed within function calls, e.g. `dplyr::select(mtcars, mpg, cyl)`. 
       Toggle this if your code makes heavy use of non-standard evaluation, and RStudio is unable to produce correct diagnostics for you.
+    | 
     | 
     | 
     | **Check arguments to R function calls**
     | Try to detect whether a particular call to a function will succeed. 
       The diagnostics engine will report if it detects missing arguments, unmatched arguments, partially matched arguments, and too many arguments.
     | 
+    | 
     | For example, in the code sample below, RStudio detects that the function `add_numbers` is missing the `y` argument. 
       Note that it is not necessary for `add_numbers` to exist in the current environment (ie, within the running R session)
+    | 
     | 
     | 
     | **Warn if variable used has no definition in scope**
@@ -393,9 +398,11 @@ That makes life frustrating, so we recommend always using the Linux/Mac style wi
       The diagnostics engine will supply a suggestion if there appears to be a typo in the symbol's name; that is, if a symbol with a similar name exists in scope as well.
     | 
     | 
+    | 
     | **Warn if variable is defined but not used**
     | This diagnostic helps to identify is a variable is created but never used. 
       This can be helpful when attempting to clean up old code, or in diagnosing other errors (wherein you believe a particular variable should be used, but isn't).
+    | 
     | 
     | In the following example, the variable `result` is assigned but never used or returned; instead, the sum is re-computed and then returned. 
     | 
@@ -403,7 +410,9 @@ That makes life frustrating, so we recommend always using the Linux/Mac style wi
     | The style diagnostic checks to see if your code conforms to [Hadley Wickham's style guide](http://adv-r.had.co.nz/Style.html), and reports style warnings when encountered. 
       In particular, the diagnostics engine attempts to identify inappropriate use (or lack thereof) of whitespace.
     | 
+    | 
     | Currently, the style diagnostics feature is not user configurable; this may be addressed in an upcoming release.
+    | 
     | 
 
 ## Summary
