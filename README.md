@@ -1,14 +1,38 @@
 # R_for_Data_Science
-My solutions for the exercises in R for Data Science (2e).
 
-Welcome! This Min-Yao's repository includes all of the .rmd files of my notes and practices for the work-in-progress 2nd edition of “R for Data Science” by Hadley Wickham.
+Welcome! 👋  
+This repository contains my **solutions, notes, and practice exercises** from working through the *2nd edition of R for Data Science* (work-in-progress) by **Hadley Wickham** and collaborators.  
 
-## Contact Info
+📖 Book link: [R for Data Science (2e)](https://r4ds.hadley.nz/)  
+
+---
+
+## 🎯 Purpose
+
+The goals of this repository are to:  
+- 📖 Reinforce my learning of R for data science concepts  
+- 🧑‍💻 Provide reproducible `.Rmd` solutions to the book’s exercises  
+- 📝 Share key takeaways, notes, and tricks for future reference and for other learners  
+
+---
+
+## 📂 Repository Structure
+
+- My notes and exercise solutions organized by chapter  
+- Standalone solutions to end-of-chapter problems  
+
+---
+
+## 🙋 About Me
 
 ## [Min-Yao Jhu](mailto:myj23@cam.ac.uk)  
 
 [LinkedIn](https://www.linkedin.com/in/min-yao-jhu)
 
-## Thank You!  
+---
 
-Don't forget to leave a ⭐ if you found this useful.
+## ⭐ Acknowledgements
+
+If you find this repo helpful, please leave a ⭐ — it motivates me to keep learning and sharing!  
+
+---
