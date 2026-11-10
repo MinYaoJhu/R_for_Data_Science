@@ -1,0 +1,12 @@
+# R and RStudio session files
+.Rproj.user/
+.Rhistory
+.RData
+.RDataTmp
+.Ruserdata
+
+# knitr caches
+*_cache/
+
+# OS files
+.DS_Store
